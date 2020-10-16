@@ -167,7 +167,7 @@ class LoginController {
                 session.usuario = user
 //                session.usuarioKerberos = user.login
                 session.time = new Date()
-                session.unidad = user.unidadEjecutora
+//                session.unidad = user.unidadEjecutora
 
 //                println "pone valores " + session.usuario
 

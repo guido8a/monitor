@@ -58,7 +58,7 @@ class MenuTagLib {
             strItems += '</li>'
         }
         def alertas ="("
-        def count = Alerta.countByPersonaAndFechaRecibidoIsNull(usuario)
+        def count = monitor.Alerta.countByPersonaAndFechaRecibidoIsNull(usuario)
 
         alertas += count
         alertas+=")"
@@ -170,7 +170,7 @@ class MenuTagLib {
         }
 
         def alertas = "("
-        def count = Alerta.countByPersonaAndFechaRecibidoIsNull(usuario)
+        def count = monitor.Alerta.countByPersonaAndFechaRecibidoIsNull(usuario)
         alertas += count
         alertas += ")"
 
