@@ -163,14 +163,14 @@
 
     <div class="row mbr-justify-content-center">
 
-    <a href= "${createLink(controller:'proyecto', action: 'proy', id:1)}" style="text-decoration: none">
+    <a href= "${createLink(controller:'provincia', action: 'mapa', id:1)}" style="text-decoration: none">
         <div class="col-lg-6 mbr-col-md-10">
             <div class="wrap">
                 <div style="width: 200px; height: 120px">
                     <asset:image src="apli/proyecto.png" title="Marco lógico de Proyecto"  width="80%" height="80%"/>
                 </div>
                 <div style="width: 450px; height: 120px">
-                    <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5"><span>Proyecto</span></h2>
+                    <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5"><span>Mapa</span></h2>
                     <p class="mbr-fonts-style text1 mbr-text display-6">Semáforos y Documentación generaa al rededor del COVID</p>
                 </div>
             </div>
