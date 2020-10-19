@@ -77,7 +77,8 @@ class LoginController {
             flash.tipo = "error"
             redirect(action: 'cambiarPass')
         } else {
-            redirect(controller: "inicio", action: "index")
+//            redirect(controller: "inicio", action: "index")
+            redirect(controller: "provincia", action: "mapa", id: 1)
         }
     }
 
@@ -225,8 +226,6 @@ class LoginController {
                         session.usuario.vaciarPermisos()
                         session.perfil = perfiles.first().perfil
                         cargarPermisos()
-                        def cn = "inicio"
-                        def an = "index"
 
                         def permisos = Prpf.findAllByPerfil(session.perfil)
                         permisos.each {
@@ -242,7 +241,7 @@ class LoginController {
                         if (count > 0) {
                             redirect(controller: 'alertas', action: 'list')
                         } else {// llama a reporte
-                            redirect(controller: 'inicio', action: 'index')
+                            redirect(controller: 'provincia', action: 'mapa', id: 1)
                         }
 
                         return

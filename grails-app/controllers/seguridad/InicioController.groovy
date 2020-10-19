@@ -52,7 +52,7 @@ class InicioController {
         def tipo = 'prod'
 
         if (grails.util.Environment.getCurrent().name == 'development') {
-            directorio = '/home/guido/proyectos/FAREPS/data/'
+            directorio = '/home/guido/proyectos/monitor/data/'
         } else {
             directorio = '/home/obras/data/'
         }
