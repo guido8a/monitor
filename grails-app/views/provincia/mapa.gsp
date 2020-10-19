@@ -35,7 +35,7 @@
     }
     </style>
 
-    <title>Localización de la Obra</title>
+    <title>Semáforos covid-19</title>
 </head>
 
 <body>
@@ -45,15 +45,24 @@
     </div>
 </div>
 
-<div class="datosObra col-md-12" style="margin-bottom: 20px; width: 100%; text-align: center">
-%{--    <div style="margin-left: -50px; font-size: large; width: 100%;">Organizaciones Registradas en el Sistema: ${cord.split('_').size()}</div>--}%
+<div class="datosObra col-md-12" style="margin-bottom: 0px; width: 100%; text-align: center">
+    <input type="hidden" id="prdo" value="${prdo}">
+    <h3>Pandemia COVID-19 Semáforos Período: ${periodo}</h3>
 </div>
 
 <div>
-    <div id="mapa" style="width: 900px; height: 640px; margin-left: 10px; float: left; margin-bottom: 20px;"></div>
+    <div id="mapa" style="width: 920px; height: 640px; margin-left: 10px; float: left; margin-bottom: 20px;"></div>
 </div>
 
-<div id="nota" style="float: left; width: 200px;" >
+<div class="btn-group" id="divAvanza" style="margin-top: 30px; margin-left: 10px">
+    <a href="#" class="btn btn-success" id="btnAdelante"><i class="fa fa-arrow-right"></i> Siguiente Período</a>
+</div>
+<div class="btn-group" id="divAtras" style="margin-top: 30px; margin-left: 10px">
+    <a href="#" class="btn btn-success" id="btnAtras"><i class="fa fa-arrow-left"></i> Período Anterior</a>
+</div>
+
+
+<div id="nota" style="float: left; width: 180px;" >
     <div style="margin: 20px; margin-top: 80px;" >
         <b>Nota:</b>
 
@@ -75,15 +84,11 @@
     <a href="#" class="btn btn-primary" id="btnImprimir"><i class="fa fa-print"></i> Imprimir </a>
 </div>
 
-<div class="btn-group" style="margin-top: 10px; margin-left: 10px">
-    <a href="#" class="btn btn-danger hidden" id="btnAuto"><i class="fa fa-car"></i> Mapa Automático </a>
-    <a href="#" class="btn btn-info" id="btnManual"><i class="fa fa-map-marker"></i> Mapa Manual </a>
-</div>
+%{--<div class="btn-group" style="margin-top: 10px; margin-left: 10px">--}%
+%{--    <a href="#" class="btn btn-danger hidden" id="btnAuto"><i class="fa fa-car"></i> Mapa Automático </a>--}%
+%{--    <a href="#" class="btn btn-info" id="btnManual"><i class="fa fa-map-marker"></i> Mapa Manual </a>--}%
+%{--</div>--}%
 
-<div class="btn-group hidden" id="divAvances" style="margin-top: 30px; margin-left: 10px">
-    <a href="#" class="btn btn-success" id="btnAtras"><i class="fa fa-arrow-left"></i> Atras </a>
-    <a href="#" class="btn btn-success" id="btnAdelante"><i class="fa fa-arrow-right"></i> Adelante </a>
-</div>
 
 
 <script type="text/javascript">
@@ -118,91 +123,46 @@
             center             :  {lat: -1.7, lng: -78},
             zoom               : 7,
             maxZoom            : 16,
-            minZoom            : 4,
+            minZoom            : 5,
             panControl         : false,
             zoomControl        : true,
             mapTypeControl     : false,
             scaleControl       : false,
             streetViewControl  : false,
             overviewMapControl : false,
-
             mapTypeId : google.maps.MapTypeId.ROADMAP //SATELLITE, ROADMAP, HYBRID, TERRAIN
         };
 
         map = new google.maps.Map(document.getElementById('mapa'), myOptions);
 
         /* maneja los datos */
-        %{--var cord = '${cord}'.split('_');--}%
-        %{--var nmbr = '${nmbr}'.split('_');--}%
-        %{--var plns = '${plns}'.split('_');--}%
+        var cord = '${cord}'.split('_');
+        var nmbr = '${nmbr}'.split('_');
+        var ruta = '${ruta}'.split(' ');
 
-        %{--poneMarcas(cord,plns,nmbr);--}%
+        console.log('ruta:', ruta);
 
-        //ver en: http://maps.google.com/mapfiles/ms/icons/red-dot.png
-        %{--for (var i = 0; i <= corde.length; ++i) {--}%
-        %{--    var cr = corde[i].split(' ')--}%
-        %{--    var path = ''--}%
-        %{--    if(plns[i] == 'S') {--}%
-        %{--        path = '${assetPath(src: '/apli/pin-p.png')}'--}%
-        %{--    } else {--}%
-        %{--        path = '${assetPath(src: '/apli/pin-o.png')}'--}%
-        %{--    }--}%
-        %{--    var marker = new google.maps.Marker({--}%
-        %{--        map: map,--}%
-        %{--        position: new google.maps.LatLng(parseFloat(cr[0]) + 0.1* Math.random(),--}%
-        %{--            parseFloat(cr[1]) + 0.1* Math.random()),--}%
-        %{--        icon: path--}%
-        %{--    });--}%
-        %{--    poneMensaje(marker, nmbr[i].strReplaceAll('kk', '<br>'));--}%
-        %{--}--}%
+        // poneMarcas(cord, path, nmbr);
+        for (var i = 0; i <= cord.length; ++i) {
+            var cr = cord[i].split(' ')
+            var path = '';
+            path = '${assetPath(src: '/apli/pin-o.png')}';
+            console.log('ruta:', path);
+            if(cr[2] == '1') {
+                path = '${assetPath(src: '/apli/pin-v.png')}';
+            } else if(cr[2] == '2') {
+                path = '${assetPath(src: '/apli/pin-a.png')}';
+            } else {
+                path = '${assetPath(src: '/apli/pin-r.png')}';
+            }
+            var marker = new google.maps.Marker({
+                map: map,
+                position: new google.maps.LatLng(parseFloat(cr[0]), parseFloat(cr[1])),
+                icon: path
+            });
+            poneMensaje(marker, nmbr[i].strReplaceAll('kk', '<br>'));
+        }
     }
-
-    function initialize2() {
-
-        var myOptions = {
-            center             : countryCenter,
-            // center             :  {lat: -1.8, lng: -79},
-            zoom               : 7,
-            maxZoom            : 16,
-            minZoom            : 4,
-            panControl         : false,
-            zoomControl        : true,
-            mapTypeControl     : false,
-            scaleControl       : false,
-            streetViewControl  : false,
-            overviewMapControl : false,
-
-            mapTypeId : google.maps.MapTypeId.ROADMAP //SATELLITE, ROADMAP, HYBRID, TERRAIN
-        };
-
-        map = new google.maps.Map(document.getElementById('mapa'), myOptions);
-
-        /* maneja los datos */
-        %{--var cord = '${cord}'.split('_');--}%
-        %{--var nmbr = '${nmbr}'.split('_');--}%
-        %{--var plns = '${plns}'.split('_');--}%
-
-        %{--poneMarcas(cord,plns,nmbr);--}%
-
-        //ver en: http://maps.google.com/mapfiles/ms/icons/red-dot.png
-        %{--for (var i = 0; i <= cord.length; ++i) {--}%
-        %{--    var cr = cord[i].split(' ')--}%
-        %{--    var path = ''--}%
-        %{--    if(plns[i] == 'S') {--}%
-        %{--        path = '${assetPath(src: '/apli/pin-p.png')}'--}%
-        %{--    } else {--}%
-        %{--        path = '${assetPath(src: '/apli/pin-o.png')}'--}%
-        %{--    }--}%
-        %{--    var marker = new google.maps.Marker({--}%
-        %{--        map: map,--}%
-        %{--        position: new google.maps.LatLng(parseFloat(cr[0]) + 0.1* Math.random(),--}%
-        %{--            parseFloat(cr[1]) + 0.1* Math.random()),--}%
-        %{--        icon: path--}%
-        %{--    });--}%
-        %{--    poneMensaje(marker, nmbr[i].strReplaceAll('kk', '<br>'));--}%
-        %{--}--}%
-    }
-
 
     function poneMensaje(marker, secretMessage) {
         var infowindow = new google.maps.InfoWindow({
@@ -215,72 +175,11 @@
     }
 
 
-
-    function poneMarcas(cord,plns,nmbr){
-        for (var i = 0; i <= cord.length; ++i) {
-            var cr = 0;
-
-            if(cord[i]){
-                cr = cord[i].split(' ')
-            }else{
-                cr = 0
-            }
-
-            var path = '';
-            if(plns[i] == 'S') {
-                path = '${assetPath(src: '/apli/pin-p.png')}'
-            } else {
-                path = '${assetPath(src: '/apli/pin-o.png')}'
-            }
-            var marker = new google.maps.Marker({
-                map: map,
-                position: new google.maps.LatLng(parseFloat(cr[0]) + 0.1* Math.random(),
-                    parseFloat(cr[1]) + 0.1* Math.random()),
-                icon: path
-            });
-
-            var n = '';
-
-            if(nmbr[i]){
-                n = nmbr[i]
-            }else{
-                n = ''
-            }
-
-            poneMensaje(marker,n.strReplaceAll('kk', '<br>'));
-        }
-    }
-
     $(function () {
-        // initialize();
-        //
-        // setTimeout(function() {
-        //     initialize2();
-        // }, 5000);
-
-        cargarMapasAutomaticos();
+        initialize();
     });
 
-    var timer = null;
 
-    function cargarMapasAutomaticos(){
-
-        for (var step = 0; step < 5; step++) {
-            if(step == 0){
-                initialize();
-            }else{
-                if (step % 2 == 0){
-                    timer =  setTimeout(function() {
-                        initialize();
-                    }, 2500 + (step*2000));
-                }else{
-                    timer =  setTimeout(function() {
-                        initialize2();
-                    }, 2500 + (step*2000));
-                }
-            }
-        }
-    }
 
     function cargarManual(){
         clearTimeout(timer);
@@ -288,7 +187,8 @@
 
     $("#btnAuto").click(function () {
         $(this).addClass("hidden");
-        $("#divAvances").addClass("hidden");
+        $("#divAvanza").addClass("hidden");
+        $("#divAtras").addClass("hidden");
         $("#btnManual").removeClass("hidden");
         cargarMapasAutomaticos();
     });
@@ -296,20 +196,27 @@
     $("#btnManual").click(function () {
         $(this).addClass("hidden");
         $("#btnAuto").removeClass("hidden");
-        $("#divAvances").removeClass("hidden");
+        $("#divAvanza").removeClass("hidden");
+        $("#divAtras").removeClass("hidden");
         cargarManual();
     });
 
     $("#btnAtras").click(function (){
-        initialize();
+        var prdo = $("#prdo").val();
+        prdo = parseInt(prdo) - 1;
+        if(prdo < 1) prdo = 1;
+        location.href="${createLink(controller: 'provincia', action: 'mapa')}/" + prdo
     });
 
     $("#btnAdelante").click(function (){
-        initialize2();
+        var prdo = $("#prdo").val();
+        prdo = parseInt(prdo) + 1;
+        location.href="${createLink(controller: 'provincia', action: 'mapa')}/" + prdo
     });
 
     $("#btnImprimir").click(function () {
-        $("#divAvances").addClass("hidden");
+        $("#divAvanza").addClass("hidden");
+        $("#divAtras").addClass("hidden");
 
         $("#nota").addClass('noprint')
         $("#btnVolver").addClass('noprint')
