@@ -163,7 +163,7 @@
 
     <div class="row mbr-justify-content-center">
 
-    <a href= "${createLink(controller:'provincia', action: 'mapa', id:1)}" style="text-decoration: none">
+    <a href= "${createLink(controller:'provincia', action: 'mapa')}" style="text-decoration: none">
         <div class="col-lg-6 mbr-col-md-10">
             <div class="wrap">
                 <div style="width: 200px; height: 120px">

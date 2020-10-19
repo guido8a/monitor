@@ -2,6 +2,8 @@ package geografia
 
 class ProvinciaController {
 
+    def dbConnectionService
+
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index() {
@@ -98,35 +100,32 @@ class ProvinciaController {
 
 
     def mapa(){
-//        def cn = dbConnectionService.getConnection()
-//        def sql = "select * from rp_orgn() order by unejplns desc"
-//
-//        def coord = '', nmbr = '', txto = '', con_plan = '', plns, pfi, cnvn, cnvnfida, cnvnasap
-//        println "sql: $sql"
-//
-//        cn.eachRow(sql.toString()) {d ->
-//            coord += (coord? '_' : '') + "${d.unejlatt} ${d.unejlong}"
-//            plns = d.unejplns.toInteger() > 0
-//            pfi  = d.nmro_pfi.toInteger() > 0
-//            cnvn = d.cnvnmnto?.toInteger() > 0
-//            cnvnfida = d.cnvnfida?.toInteger() > 0
-//            cnvnasap = d.cnvnasap?.toInteger() > 0
-//            txto = "${d.unejnmbr} kkTalleres realizados: ${d.nmrotllr} " +
-//                    "kkPersonas capacitadas: ${d.nmroprtl} " +
-//                    "kkHombres: ${d.nmrohomb} Mujeres: ${d.nmromuje} Total: ${d.nmrobenf} " +
-//                    (pfi ? 'kkSi cuenta con un PFI' :'') +
-//                    (plns ? 'kkSi cuenta con un PNS' : '') +
-//                    (cnvn ? "kkMonto del convenio: ${d.cnvnmnto}" : "") +
-//                    (cnvnfida ? "kkAporte FIDA: ${d.cnvnfida}" : "") +
-//                    (cnvnasap ? "kkAporte ASAP: ${d.cnvnasap}" : "")
-//            if(d.unej__id == 200) println"unej: ${d.unejnmbr} --> ${plns}"
-//            con_plan += (con_plan? '_' : '') + (plns ? 'S' : ' ')
-//            nmbr += (nmbr? '_' : '') + txto
-//
-//        }
-////        println "data: ${con_plan.split('_')}"
-//
-//        return [cord: coord, nmbr: nmbr, plns: con_plan]
+        println "mapa: $params"
+        def cn = dbConnectionService.getConnection()
+        def sql = ""
+        def coord = '', nmbr = '', txto = '', docu, prdo = 0, periodo
+        if(!params.id) {
+            prdo = 1
+        } else {
+            prdo = params.id.toInteger()
+        }
+
+        sql = "select * from rp_smfr(${prdo})"
+        println "sql: $sql"
+
+        cn.eachRow(sql.toString()) {d ->
+            coord += (coord? '_' : '') + "${d.cntnlatt} ${d.cntnlong} ${d.smfrcolr}"
+            docu = true
+            txto = "${d.cntnnmbr} kkPeriodo: ${d.smfrfcds.format('dd-MMM-yyyy')} al ${d.smfrfchs.format('dd-MMM-yyyy')}" +
+                    "${(docu  ? 'kkDocumentos: N' : '')}"
+
+            nmbr += (nmbr? '_' : '') + txto
+            periodo = "${d.smfrfcds.format('dd-MMM-yyyy')} al ${d.smfrfchs.format('dd-MMM-yyyy')}"
+        }
+
+        //${assetPath(src: '/apli/pin-p.png')}
+        def semaforos = "${assetPath(src: '/apli/pin-p.png')} ${assetPath(src: '/apli/pin-o.png')} ${assetPath(src: '/apli/pin-p.png')}"
+        return [cord: coord, nmbr: nmbr, prdo: prdo, periodo: periodo]
 
     }
 } //fin controller
