@@ -9,7 +9,7 @@
                 Número
             </label>
             <div class="col-md-4">
-                <g:textField name="numero" maxlength="2" class="numeroV form-control required number" value="${provinciaInstance?.numero}"/>
+                <g:textField name="numero" maxlength="2" class="numeroV form-control required number" value="${provinciaInstance?.numero ?: ''}"/>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </span>

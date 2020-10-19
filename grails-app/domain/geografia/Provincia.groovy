@@ -1,7 +1,7 @@
 package geografia
 
 class Provincia {
-    String numero
+    int numero
     String nombre
     double longitud
     double latitud

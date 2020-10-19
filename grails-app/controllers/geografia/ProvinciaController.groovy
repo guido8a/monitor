@@ -43,7 +43,7 @@ class ProvinciaController {
             if(provinciaInstance?.numero.toInteger() == params.numero.toInteger()){
                 provinciaInstance.properties = params
             }else{
-                if(Provincia.findAllByNumero(params.numero)){
+                if(Provincia.findAllByNumero(params.numero.toInteger())){
                     render "no_Ya existe una provincia registrada con este número!"
                     return
                 }else{
@@ -52,7 +52,7 @@ class ProvinciaController {
             }
         }//es edit
         else {
-            if(Provincia.findAllByNumero(params.numero)){
+            if(Provincia.findAllByNumero(params.numero.toInteger())){
                 render "no_Ya existe una provincia registrada con este número!"
                 return
             }else{

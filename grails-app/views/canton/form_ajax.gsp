@@ -13,7 +13,7 @@
                     Número
                 </label>
                 <div class="col-md-4">
-                    <g:textField name="numero" maxlength="4" class="numeroV form-control required number" value="${cantonInstance?.numero}"/>
+                    <g:textField name="numero" maxlength="4" class="numeroV form-control required number" value="${cantonInstance?.numero ?: ''}"/>
                     <p class="help-block ui-helper-hidden"></p>
                 </div>
             </span>
@@ -25,7 +25,7 @@
                     Nombre
                 </label>
                 <div class="col-md-8">
-                    <g:textField name="nombre" maxlength="63" class="form-control required" value="${cantonInstance?.nombre}"/>
+                    <g:textField name="nombre" maxlength="63" class="form-control required allCaps" value="${cantonInstance?.nombre}"/>
                     <p class="help-block ui-helper-hidden"></p>
                 </div>
             </span>
