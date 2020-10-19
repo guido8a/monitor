@@ -999,8 +999,8 @@ class PersonaController {
         personaInstance.properties = params
 
         if (!personaInstance.save(flush: true)) {
-            println "error al guardar la persona"
-            render "ERROR*Ha ocurrido un error al guardar Persona: " + renderErrors(bean: personaInstance)
+            println "error al guardar la persona " + personaInstance.errors
+            render "ERROR*Ha ocurrido un error al guardar Persona: "
         }else{
             render "SUCCESS*${params.id ? 'Actualización' : 'Creación'} de Persona exitosa."
         }

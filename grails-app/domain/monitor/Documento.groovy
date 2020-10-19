@@ -1,6 +1,7 @@
 package monitor
 
 import audita.Auditable
+import geografia.Canton
 
 /*Es toda documentación importante que debe ser archivada en el proyecto. Este comprende el archivo de proyecto o el archivo de casos de proyecto.
 Se usará preferentemente formato pdf, pero pueden incluirse otros formatos aunque no puedan ser visualizados desde el sistema.*/
@@ -11,13 +12,10 @@ Se usará preferentemente formato pdf, pero pueden incluirse otros formatos aunq
  * Se usará preferentemente formato pdf, pero pueden incluirse otros formatos aunque no puedan ser visualizados desde el sistema.
  */
 class Documento implements Auditable {
-    /**
-     * Proyecto al cual pertenece el documento
-     */
-    /**
-     * Grupo de procesos del documento
-     */
-    Fuente grupoProcesos
+
+    Canton canton
+    Fuente fuente
+
     /**
      * Descripción del documento
      */
@@ -33,7 +31,7 @@ class Documento implements Auditable {
     /**
      * Path del archivo del documento
      */
-    String documento
+    String ruta
 
     /**
      * Define los campos que se van a ignorar al momento de hacer logs
@@ -51,13 +49,12 @@ class Documento implements Auditable {
         version false
         columns {
             id column: 'dcmt__id'
-            proyecto column: 'proy__id'
-            unidadEjecutora column: 'unej__id'
-            grupoProcesos column: 'grpr__id'
+            canton column: 'cntn__id'
+            fuente column: 'fnte__id'
             descripcion column: 'dcmtdscr'
             clave column: 'dcmtclve'
             resumen column: 'dcmtrsmn'
-            documento column: 'dcmtdcmt'
+            ruta column: 'dcmtruta'
         }
     }
 
@@ -65,13 +62,10 @@ class Documento implements Auditable {
      * Define las restricciones de cada uno de los campos
      */
     static constraints = {
-        proyecto(blank: true, nullable: true, attributes: [mensaje: 'Proyecto'])
-        unidadEjecutora(blank: true, nullable: true, attributes: [mensaje: 'Unidad ejecutora'])
-        grupoProcesos(blank: true, nullable: true, attributes: [mensaje: 'Grupo de Procesos'])
         descripcion(size: 1..63, blank: true, nullable: true, attributes: [mensaje: 'Descripción del documento'])
         clave(size: 1..63, blank: true, nullable: true, attributes: [mensaje: 'Palabras clave'])
         resumen(size: 1..1024, blank: true, nullable: true, attributes: [mensaje: 'Resumen'])
-        documento(size: 1..255, blank: true, nullable: true, attributes: [mensaje: 'Ruta del documento'])
+        ruta(size: 1..255, blank: true, nullable: true, attributes: [mensaje: 'Ruta'])
     }
 
     /**
