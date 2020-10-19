@@ -144,10 +144,12 @@ class SemaforoController {
             render "er_Ya existe un registro creado en ese período"
         }else{
             semaforo = new Semaforo()
+            semaforo.canton = canton
             semaforo.periodo = periodo
             semaforo.color = params.color.toInteger()
 
             if(!semaforo.save(flush:true)){
+                println("error al guardar el semaforo " + semaforo.errors)
                 render "no"
             }else{
                 render "ok"

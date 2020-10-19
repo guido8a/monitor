@@ -79,13 +79,18 @@
                     dialog.modal('hide');
                     var parts = msg.split("_");
                     if(parts[0] == 'ok'){
-                        log(parts[1], "success");
+                        log("Registro agregado correctamente", "success");
                         setTimeout(function () {
                             location.reload(true);
                         }, 1000);
                     }else{
-                        bootbox.alert('<i class="fa fa-exclamation-triangle text-danger fa-3x"></i> ' + '<strong style="font-size: 14px">' + parts[1] + '</strong>');
-                        return false;
+                        if(parts[0] == 'er'){
+                            bootbox.alert('<i class="fa fa-exclamation-triangle text-danger fa-3x"></i> ' + '<strong style="font-size: 14px">' + parts[1] + '</strong>');
+                            return false;
+                        }else{
+                            log("Error al agregar el registro","error")
+                        }
+
                     }
                 }
             });
