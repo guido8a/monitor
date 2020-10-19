@@ -68,6 +68,7 @@ class InicioController {
         def nmbr = ""
         def arch = ""
         def cuenta = 0
+        def fechas = []
         new File(directorio).traverse(type: groovy.io.FileType.FILES, nameFilter: ~/.*\.csv/) { ar ->
             nmbr = ar.toString() - directorio
             arch = nmbr.substring(nmbr.lastIndexOf("/") + 1)
@@ -79,20 +80,25 @@ class InicioController {
             ar.withReader('UTF-8') { reader ->
                 print "Cargando datos desde: $ar "
                 while ((line = reader.readLine()) != null) {
-                    if (cuenta > 0 && cuenta < procesa) {
-
+                    println ">>${line}"
+                    if(cuenta == 0){
                         rgst = line.split('\t')
                         rgst = rgst*.trim()
-//                        println "***** $rgst"
-
-                        inserta = cargaData(rgst)
-                        cont += inserta.insertados
-                        repetidos += inserta.repetidos
-
-                        if (rgst.size() > 2 && rgst[-2] != 0) cuenta++  /* se cuentan sólo si hay valores */
-
-                    } else {
+//                        println "ultimo: ${rgst[-1]}"
+                        fechas = poneFechas(rgst)
                         cuenta++
+                    } else if(cuenta < procesa && line?.size() > 20) {
+                        rgst = line.split('\t')
+                        rgst = rgst*.trim()
+                        println "***** $rgst"
+                        if(rgst[6]) {
+                            inserta = cargaData(rgst, fechas)
+                            cont += inserta.insertados
+                            repetidos += inserta.repetidos
+                            cuenta++
+                        }
+                    } else {
+                        break
                     }
                 }
             }
@@ -103,7 +109,7 @@ class InicioController {
     }
 
 
-    def cargaData(rgst) {
+    def cargaData(rgst, fechas) {
         def errores = ""
         def cnta = 0
         def insertados = 0
@@ -111,153 +117,100 @@ class InicioController {
         def cn = dbConnectionService.getConnection()
         def sqlParr = ""
         def sql = ""
-        def parr = 0
+        def cntn = 0
         def tx = ""
-        def fcha = ""
+        def fcds = ""
+        def fchs = ""
         def zona = ""
         def nombres
         def nmbr = "", apll = "", login = "", orden = 0
         def id = 0
         def resp = 0
 
-//        println "\n inicia cargado de datos para $rgst"
+        println "\ninicia cargado de datos para $rgst"
+        println "fechas: $fechas"
         cnta = 0
         if (rgst[1].toString().size() > 0) {
-            tx = rgst[7].split('-').last().split(' ').last()
+            tx = rgst[2]
 //            sqlParr = "select parr__id from parr where parrnmbr ilike '%${tx}%'"
-            sqlParr = "select parr__id from parr, cntn, prov where parrnmbr ilike '%${tx}%' and " +
-                    "cntn.cntn__id = parr.cntn__id and prov.prov__id = cntn.prov__id and " +
-                    "provnmbr ilike '${rgst[5].toString().trim()}'"
-//            println "sqlParr: $sqlParr"
-            parr = cn.rows(sqlParr.toString())[0]?.parr__id
+            sqlParr = "select cntn__id from cntn, prov where cntnnmbr ilike '%${tx}%' and " +
+                    "prov.prov__id = cntn.prov__id and provnmbr ilike '${rgst[0].toString().trim()}'"
+            println "sqlParr: $sqlParr"
+            cntn = cn.rows(sqlParr.toString())[0]?.cntn__id
 //            sql = "select count(*) nada from unej where unejnmbr = '${rgst[3].toString().trim()}'"
-            sql = "select count(*) nada from unej where unejnmbr = '${rgst[3].toString().trim()}'"
-            cnta = cn.rows(sql.toString())[0]?.nada
 //            println "parr: $parr"
-            if (!parr) {
-                sqlParr = "select cntn__id from cntn where cntnnmbr ilike '%${rgst[6]}%'"
-                def cntn = cn.rows(sqlParr.toString())[0]?.cntn__id
-                if (cntn) {
-                    sqlParr = "insert into parr(parr__id, cntn__id, parrnmbr) " +
-                            "values (default, ${cntn}, '${rgst[7]}') returning parr__id"
+            if (!cntn) {
+                sqlParr = "select prov__id from prov where provnmbr ilike '%${rgst[0]}%'"
+                def prov = cn.rows(sqlParr.toString())[0]?.prov__id
+                if (prov) {
+                    sqlParr = "insert into cntn(cntn__id, prov__id, cntnnmbr, cntnnmro) " +
+                            "values (default, ${prov}, '${rgst[2]}', '${rgst[1]}') returning cntn__id"
                     cn.eachRow(sqlParr.toString()) { d ->
-                        parr = d.parr__id
+                        cntn = d.cntn__id
                     }
-                    println "parr --> $parr"
+                    println "cntn --> $cntn"
                 }
-//                println "no existe parroquia: ${rgst[5]} ${rgst[6]} ${tx} --> cntn: ${cntn}"
+                println "no existe cantón: ${rgst[0]} ${rgst[3]} ${tx} --> cntn: ${cntn}"
 //                println "sql: $sqlParr"
             }
+            sql = "select count(*) nada from smfr where cntn__id = '${cntn}'"
+            cnta = cn.rows(sql.toString())[0]?.nada
 
-            if (parr && (cnta == 0)) {
-                if (rgst[2]?.size() > 6) {
-                    fcha = new Date().parse("dd/MM/yyyy", rgst[2]).format('yyyy-MM-dd')
-                } else {
-                    fcha = '1-jan-1900'
-                }
-                zona = rgst[4].split(' ').last()
-                /* crea la UNEJ*/
-                sql = "insert into unej (unej__id, unejinst, unejfcin, unejnmbr, unejnmsr, parr__id, unejdire, " +
-                        "unejrefe, unejtelf, unejlgal, unej_ruc, unej_rup, unejmail, " +
-                        "unejanio, unejordn, tpin__id, unejactv, unejacsc, unejfort) " +
-                        "values(default, '${rgst[1]}', '${fcha}', '${rgst[3]}', ${zona}, ${parr}, '${rgst[8]}', " +
-                        "'${rgst[9]}', '${rgst[10]}', '${rgst[11][0]}', '${rgst[12]}', '${rgst[13]}', '${rgst[14]}', " +
-                        "${rgst[15]}, ${orden}, 2, '${rgst[32]}', '${rgst[33]}', '${rgst[34]}')" +
-                        "returning unej__Id"
-//                        "on conflict (parr__id, cmndnmbr) DO NOTHING"
-                println "sql ---> ${sql}"
+            if (cntn && (cnta == 0)) {
+                def i = 0
+                fechas.each { f ->
+                    tx = f.split(' ')
+                    fcds = new Date().parse("yyyy-MM-dd", tx[0]).format('yyyy-MM-dd')
+                    fchs = new Date().parse("yyyy-MM-dd", tx[1]).format('yyyy-MM-dd')
+                    sql = "insert into smfr (smfr__id, cntn__id, smfrcolr, smfrdsde, smfrhsta) " +
+                        "values(default, '${cntn}', ${rgst[4+i]}, '${fcds}', '${fchs}') "
+                        "returning smfr__id"
+                    println "sql ---> ${sql}"
 
-                try {
-                    cn.eachRow(sql.toString()) { d ->
-                        id = d.unej__id
-                        insertados++
-                        orden++
+                    try {
+                        cn.eachRow(sql.toString()) { d ->
+                            id = d.smfr__id
+                            insertados++
+                            orden++
+                        }
+                        println "---> id: ${id}"
+                    } catch (Exception ex) {
+                        repetidos++
+                        println "Error principal $ex"
+                        println "sql: $sql"
                     }
-                    println "---> id: ${id}"
-
-                    /********** crea PRSN ***********/
-
-                    nombres = rgst[16].split(' ').toList()
-                    if (nombres.size() > 3) {
-                        nmbr = "${nombres[0]} ${nombres[1]}"
-                        apll = "${nombres[2]} ${nombres[3]}"
-                        login = "${nmbr[0]}${nombres[2]}"
-                    } else {
-                        nmbr = nombres[0]
-                        nombres.remove(0)
-                        login = "${nmbr[0]}${nombres[0]}"
-                        apll = nombres.join(' ')
-                    }
-
-                    sql = "insert into prsn (prsn__id, unej__id, prsndire, prsnrefe, prsntelf, prsnmail, " +
-                            "prsncdla, prsnnmbr, prsnapll, prsnactv, prsnsexo, prsnlogn, prsnpass) " +
-                            "values(default, ${id}, '${rgst[17]}', '${rgst[18]}', '${rgst[19].replaceAll('\'', '')}', '${rgst[20]}', " +
-                            "'0000', '${nmbr}', '${apll}', 0, 'F', '${login}', md5('123'))"
-                    println "sql2: $sql"
-                    cn.execute(sql.toString())
-
-                    resp = hallaResponsable(rgst[36])
-                    println "resp: ${resp}"
-
-                    sql = "insert into dtor (dtor__id, unej__id, " +
-                            "dtornmhh, dtornmmj, dtornmjv, dtornmad, dtornsam, prsn__id) " +
-                            "values(default, ${id}, " +
-                            "${rgst[21].trim() ?: null}, ${rgst[22].trim() ?: null}, ${rgst[23].trim() ?: null}," +
-                            " ${rgst[24].trim() ?: null}, ${rgst[25].trim() ?: null}, ${resp})"
-                    println "sql2: $sql"
-                    cn.execute(sql.toString())
-
-                    println "insertaEtor.... ${rgst[26]},${rgst[27]},${rgst[28]},${rgst[29]},${rgst[30]},${rgst[31]}"
-                    println "insertaEtor..>> ${rgst[26].trim().size() > 0 ? rgst[26] : 'vacío'}"
-                    if (rgst[26].trim()?.size() > 0) insertaEtor(id, 2, rgst[26])
-                    if (rgst[27].trim()?.size() > 0) insertaEtor(id, 4, rgst[27])
-                    if (rgst[28].trim()?.size() > 0) insertaEtor(id, 3, rgst[28])
-                    if (rgst[29].trim()?.size() > 0) insertaEtor(id, 5, rgst[29])
-                    if (rgst[30].trim()?.size() > 0) insertaEtor(id, 1, rgst[30])
-                    if (rgst[31].trim()?.size() > 0) insertaEtor(id, 6, rgst[31])
-
-                    println "inicia insertaCtgr.... ${rgst[39]}, ${rgst[41]}"
-                    /* tpct:1,2 col:39,41 es numérico */
-                    if (rgst[39]?.toInteger() > 0) insertaCtgr(id, 1, rgst[39])
-                    if (rgst[41]?.toInteger() > 0) insertaCtgr(id, 2, rgst[41])
-
-                    if (rgst[42]) insertaCtgr(id, 3, rgst[42])
-                    if (rgst[43]) insertaCtgr(id, 4, rgst[43])
-                    if (rgst[44]) insertaCtgr(id, 5, rgst[44])
-                    if (rgst[45]) insertaCtgr(id, 6, rgst[45])
-                    if (rgst[46]) insertaCtgr(id, 7, rgst[46])
-                    if (rgst[47]) insertaCtgr(id, 8, rgst[47])
-                    if (rgst[48]) insertaCtgr(id, 9, rgst[48])
-                    if (rgst[49]) insertaCtgr(id, 10, rgst[49])
-                    if (rgst[50]) insertaCtgr(id, 11, rgst[50])
-                    if (rgst[51]) insertaCtgr(id, 12, rgst[51])
-                    if (rgst[52]) insertaCtgr(id, 13, rgst[52])
-
-                    println "inicia insertaNecd.... ${rgst[53]}, ${rgst[60]}"
-                    if (rgst[53]) insertaNecd(id, 1)
-                    if (rgst[54]) insertaNecd(id, 2)
-                    if (rgst[55]) insertaNecd(id, 3)
-                    if (rgst[56]) insertaNecd(id, 4)
-                    if (rgst[57]) insertaNecd(id, 5)
-                    if (rgst[58]) insertaNecd(id, 6)
-                    if (rgst[59]) insertaNecd(id, 7)
-                    if (rgst[60]) insertaNecd(id, 8)
-
-
-                } catch (Exception ex) {
-                    repetidos++
-                    println "Error principal $ex"
-                    println "sql: $sql"
+                    i++
                 }
-
 
             }
-//            println "sql: $sql"
-
-
         }
         cnta++
         return [errores: errores, insertados: insertados, repetidos: repetidos]
+    }
+
+    def poneFechas(rgst) {
+        def fechas = rgst[(4..-1)]
+        def ddds = 0, mmds = 0, ddhs = 0, mmhs = 0, data = []
+        def lsFecha = []
+//        println "==>${fechas}"
+        fechas.each {f ->
+            data = f.split(' ')
+            ddds = data[0]
+            mmds = meses(data[1])
+            ddhs = data[3]
+            mmhs = meses(data[4])
+            def fcin = new Date().parse("dd-MM-yyyy", "${ddds}-${mmds}-2020")
+            def fcfn = new Date().parse("dd-MM-yyyy", "${ddhs}-${mmhs}-2020")
+            lsFecha.add("${fcin.format('yyyy-MM-dd')} ${fcfn.format('yyyy-MM-dd')}")
+//            println "..${fcin.format('yyyy-MM-dd')} - ${fcfn.format('yyyy-MM-dd')}"
+        }
+        return lsFecha
+    }
+
+    def meses(mes) {
+        def mess = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre',
+          'noviembre', 'diciembre']
+        return mess.indexOf(mes) + 1
     }
 
     def verifica() {

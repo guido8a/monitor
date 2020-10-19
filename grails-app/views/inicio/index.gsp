@@ -171,7 +171,7 @@
                 </div>
                 <div style="width: 450px; height: 120px">
                     <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5"><span>Mapa</span></h2>
-                    <p class="mbr-fonts-style text1 mbr-text display-6">Semáforos y Documentación generada al rededor del COVID</p>
+                    <p class="mbr-fonts-style text1 mbr-text display-6">Semáforos y Documentación Generada por la Emergencia del COVID-19</p>
                 </div>
             </div>
         </div>
