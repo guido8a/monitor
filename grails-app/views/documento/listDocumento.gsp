@@ -95,7 +95,6 @@
         } //else
     }
 
-
     function deleteDocumento(itemId) {
         bootbox.dialog({
             title   : "Alerta",
@@ -124,7 +123,7 @@
                                 log(parts[1], parts[0] == "SUCCESS" ? "success" : "error"); // log(msg, type, title, hide)
                                 closeLoader();
                                 if (parts[0] == "SUCCESS") {
-                                    reloadTablaDocumento();
+                                    cargarTablaDocumento();
                                 }
                             }
                         });
@@ -189,8 +188,6 @@
     }
 
     $(function () {
-
-
         $("#btnSearchDoc").click(function () {
             cargarTablaDocumento($.trim($("#searchDoc").val()));
         });
@@ -199,8 +196,6 @@
                 cargarTablaDocumento($.trim($("#searchDoc").val()));
             }
         });
-
-
     });
 </script>
 </html>

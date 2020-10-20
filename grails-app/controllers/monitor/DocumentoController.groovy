@@ -1,6 +1,7 @@
 package monitor
 
 import geografia.Canton
+import org.springframework.dao.DataIntegrityViolationException
 
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
@@ -224,22 +225,14 @@ class DocumentoController {
                     return
                 }
             }
-//        }
-
-
-
 
     } //save para grabar desde ajax
 
     def existeDoc_ajax() {
         println "existeDoc_ajax $params"
         def doc = Documento.get(params.id)
-        def path
-        if (doc.proyecto) {
-            path = "/var/fida/documentosProyecto/" + doc.documento
-        } else {
-            path = "/var/fida/documentosUnidad/" + doc.documento
-        }
+        def path = "/var/monitor/documentosCanton/" + doc.ruta
+
 //        println "--> ${path}"
         def file = new File(path)
         if (file.exists()) {
@@ -251,13 +244,8 @@ class DocumentoController {
 
     def downloadDoc() {
         def doc = Documento.get(params.id)
-        def path
-        if (doc.proyecto) {
-            path = "/var/fida/documentosProyecto/" + doc.documento
-        } else {
-            path = "/var/fida/documentosUnidad/" + doc.documento
-        }
-        def nombre = doc.documento.split("/").last()
+        def path = "/var/monitor/documentosCanton/" + doc.ruta
+        def nombre = doc.ruta.split("/").last()
         def parts = nombre.split("\\.")
         def tipo = parts[1]
         switch (tipo) {
@@ -295,6 +283,32 @@ class DocumentoController {
             response.sendError(404)
         }
     }
+
+    def delete_ajax() {
+        if (params.id) {
+            def documentoInstance = Documento.get(params.id)
+            if (!documentoInstance) {
+                render "ERROR*No se encontró Documento."
+                return
+            }
+            try {
+                def path = "/var/monitor/documentosCanton/" + documentoInstance.ruta
+                documentoInstance.delete(flush: true)
+                println path
+                def f = new File(path)
+                println f.delete()
+                render "SUCCESS*Eliminación de Documento exitosa."
+                return
+            } catch (DataIntegrityViolationException e) {
+                render "ERROR*Ha ocurrido un error al eliminar Documento"
+                return
+            }
+        } else {
+            render "ERROR*No se encontró Documento."
+            return
+        }
+    } //delete para eliminar via ajax
+
 
 
 }
