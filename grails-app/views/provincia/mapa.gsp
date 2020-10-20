@@ -146,6 +146,8 @@
         for (var i = 0; i <= cord.length; ++i) {
             var cr = cord[i].split(' ')
             var path = '';
+            var link = "${createLink(controller: 'provincia', action: 'mapa')}/1"
+
             path = '${assetPath(src: '/apli/pin-o.png')}';
             console.log('ruta:', path);
             if(cr[2] == '1') {
@@ -160,7 +162,7 @@
                 position: new google.maps.LatLng(parseFloat(cr[0]), parseFloat(cr[1])),
                 icon: path
             });
-            poneMensaje(marker, nmbr[i].strReplaceAll('kk', '<br>'));
+            poneMensaje(marker, nmbr[i].strReplaceAll('kk', '<br>') + "<a href=link>Doc</a>");
         }
     }
 

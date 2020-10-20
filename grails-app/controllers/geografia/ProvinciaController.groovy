@@ -103,7 +103,7 @@ class ProvinciaController {
         println "mapa: $params"
         def cn = dbConnectionService.getConnection()
         def sql = ""
-        def coord = '', nmbr = '', txto = '', docu, prdo = 0, periodo
+        def coord = '', nmbr = '', txto = '', docu, prdo = 0, periodo, dcmt
         if(!params.id) {
             prdo = 1
         } else {
@@ -112,12 +112,16 @@ class ProvinciaController {
 
         sql = "select * from rp_smfr(${prdo})"
         println "sql: $sql"
+        println "${createLink(controller: 'inicio', action: 'index')}"
 
         cn.eachRow(sql.toString()) {d ->
             coord += (coord? '_' : '') + "${d.cntnlatt} ${d.cntnlong} ${d.smfrcolr}"
+//            docu = d.nmrodcmt > 0
             docu = true
+            dcmt += (coord? '_' : '') + "${d.cntnlatt} ${d.cntnlong} ${d.smfrcolr}"
             txto = "${d.cntnnmbr} kkPeriodo: ${d.smfrfcds.format('dd-MMM-yyyy')} al ${d.smfrfchs.format('dd-MMM-yyyy')}" +
-                    "${(docu  ? 'kkDocumentos: N' : '')}"
+                    "${(docu  ? 'kkDocumentos: 1' : '')}" +
+                    "kk<a href='/inicio/index'>Docuemnto</a>"
 
             nmbr += (nmbr? '_' : '') + txto
             periodo = "${d.smfrfcds.format('dd-MMM-yyyy')} al ${d.smfrfchs.format('dd-MMM-yyyy')}"
