@@ -139,8 +139,7 @@ environments:
             dbCreate: none
             url: jdbc:postgresql://127.0.0.1:5432/monitor
             username: postgres
-            password: 'fareps_fda'
-#            password: 'steinsgate'
+            password: 'steinsgate'
             properties:
                 jmxEnabled: true
                 initialSize: 5
