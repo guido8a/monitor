@@ -1,7 +1,5 @@
 <%@ page import="monitor.Documento" %>
 
-%{--<script type="text/javascript" src="${resource(dir: 'js', file: 'ui.js')}"></script>--}%
-%{--<script type="text/javascript" src="${resource(dir: 'js/plugins/jquery-validation-1.13.1/dist', file: 'additional-methods.min.js')}"></script>--}%
 <g:if test="${!documentoInstance}">
     <elm:notFound elem="Documento" genero="o"/>
 </g:if>
@@ -9,21 +7,19 @@
 
     <div class="modal-contenido">
         <g:uploadForm class="form-horizontal" name="frmDocumento" controller="documento" action="save_ajax" method="POST">
-%{--        <g:form class="form-horizontal" name="frmDocumento" controller="documento" action="save_ajax" method="POST"--}%
-%{--                attrs.enctype = "multipart/form-data">--}%
             <g:hiddenField name="id" value="${documentoInstance?.id}"/>
-            <g:hiddenField name="proyecto.id" value="${documentoInstance?.proyectoId?: proyecto.id}"/>
+            <g:hiddenField name="canton" value="${documentoInstance?.canton?.id ?: canton?.id}"/>
 
-            <div class="form-group keeptogether ${hasErrors(bean: documentoInstance, field: 'grupoProcesos', 'error')} ">
+            <div class="form-group keeptogether ${hasErrors(bean: documentoInstance, field: 'fuente', 'error')} ">
                 <span class="grupo">
-                    <label for="grupoProcesos" class="col-md-3 control-label">
-                        Grupo de Procesos
+                    <label for="fuente" class="col-md-3 control-label">
+                        Fuente
                     </label>
 
                     <div class="col-md-6">
-                        <g:select id="grupoProcesos" name="grupoProcesos.id" from="${monitor.Fuente.list()}"
-                                  optionKey="id" value="${documentoInstance?.grupoProcesos?.id}"
-                                  class="many-to-one form-control input-sm" noSelection="['null': '']"/>
+                        <g:select name="fuente" from="${monitor.Fuente.list().sort{it.descripcion}}"
+                                  optionKey="id" optionValue="descripcion" value="${documentoInstance?.fuente?.id}"
+                                  class="many-to-one form-control input-sm" />
                     </div>
                 </span>
             </div>
@@ -54,7 +50,6 @@
             </div>
 
             <div class="form-group keeptogether ${hasErrors(bean: documentoInstance, field: 'resumen', 'error')} ">
-%{--            <div class="row">--}%
                 <span class="grupo">
                     <label for="resumen" class="col-md-3 control-label">
                         Resumen
@@ -62,20 +57,20 @@
 
                     <div class="col-md-8">
                         <g:textArea name="resumen" cols="40" rows="5" maxlength="1024" class="form-control input-sm"
-                                    value="${documentoInstance?.resumen}"/>
+                                    value="${documentoInstance?.resumen}" style="resize: none"/>
                     </div>
                 </span>
             </div>
 
             <g:if test="${!documentoInstance.id}">
-                <div class="form-group keeptogether ${hasErrors(bean: documentoInstance, field: 'documento', 'error')} ">
+                <div class="form-group keeptogether ${hasErrors(bean: documentoInstance, field: 'ruta', 'error')} ">
                     <span class="grupo">
-                        <label for="documento" class="col-md-3 control-label">
+                        <label for="ruta" class="col-md-3 control-label">
                             Documento
                         </label>
 
                         <div class="col-md-8">
-                            <input type="file" name="documento" id="documento" class="form-control input-sm required"/>
+                            <input type="file" name="ruta" id="ruta" class="form-control input-sm required"/>
                         </div>
 
                     </span>
@@ -120,38 +115,7 @@
             }
             okExt += ext;
             okExt2 += ext;
-            // console.log('ext:', okExt, okExt2)
         });
-
-        // var validator = $("#frmDocumento").validate({
-/*
-        $("#frmDocumento").validate({
-            errorClass     : "help-block",
-            errorPlacement : function (error, element) {
-                if (element.parent().hasClass("input-group")) {
-                    error.insertAfter(element.parent());
-                } else {
-                    error.insertAfter(element);
-                }
-                element.parents(".grupo").addClass('has-error');
-            },
-            success: function (label) {
-                label.parents(".grupo").removeClass('has-error');
-                label.remove();
-            },
-            rules: {
-                documento : {
-                    required  : true,
-                    extension : okExt
-                }
-            },
-            messages       : {
-                documento : {
-                    extension : "Por favor ingrese un archivo de tipo " + okExt2
-                }
-            }
-        });
-*/
 
         $(".form-control").keydown(function (ev) {
             if (ev.keyCode == 13) {

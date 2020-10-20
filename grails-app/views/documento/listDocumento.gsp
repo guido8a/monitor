@@ -1,56 +1,61 @@
 <%@ page import="monitor.Fuente" %>
 <html>
 <head>
-<meta name="layout" content="main">
-<title>Biblioteca</title>
+    <meta name="layout" content="main">
+    <title>Documentos</title>
 </head>
 
 <div class="panel panel-primary col-md-12">
-    <h3>Biblioteca del Proyecto</h3>
+    <h3>Documentos del cantón: ${canton?.nombre}</h3>
     <div class="panel-info" style="padding: 3px; margin-top: 2px">
-    <div class="btn-toolbar toolbar">
-        <div class="btn-group">
-            <g:link controller="proyecto" action="proy" id="1" class="btn btn-sm btn-default">
-                <i class="fa fa-arrow-left"></i> Regresar a proyectos
-            </g:link>
+        <div class="btn-toolbar toolbar">
+            <div class="btn-group">
+                <g:link controller="semaforo" action="arbol" class="btn btn-sm btn-default">
+                    <i class="fa fa-arrow-left"></i> Regresar
+                </g:link>
+            </div>
+
+            <div class="btn-group">
+                <a href="#" class="btn btn-sm btn-success" id="btnAddDoc">
+                    <i class="fa fa-plus"></i> Agregar documento
+                </a>
+            </div>
+
+            <div class="btn-group col-md-3 pull-right">
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control input-sm " id="searchDoc" placeholder="Buscar"/>
+                    <span class="input-group-btn">
+                        <a href="#" class="btn btn-default" id="btnSearchDoc"><i class="fa fa-search"></i></a>
+                    </span>
+                </div><!-- /input-group -->
+            </div>
         </div>
-
-    <div class="btn-group">
-        <a href="#" class="btn btn-sm btn-success" id="btnAddDoc">
-            <i class="fa fa-plus"></i> Agregar documento de la Biblioteca
-        </a>
     </div>
-
-    <div class="btn-group col-md-3 pull-right">
-        <div class="input-group input-group-sm">
-            <input type="text" class="form-control input-sm " id="searchDoc" placeholder="Buscar"/>
-            <span class="input-group-btn">
-                <a href="#" class="btn btn-default" id="btnSearchDoc"><i class="fa fa-search"></i></a>
-            </span>
-        </div><!-- /input-group -->
-    </div>
-</div>
-    </div>
-<div id="tabla"></div>
+    <div id="tablaDocumentos"></div>
 </div>
 
 
 
 <script type="text/javascript">
+    cargarTablaDocumento();
 
-    function reloadTablaDocumento(search) {
+    $("#btnAddDoc").click(function () {
+        createEditDocumento();
+    });
+
+    function cargarTablaDocumento(search){
         var data = {
-            id : "${proyecto.id}"
+            id: '${canton?.id}'
         };
         if (search) {
             data.search = search;
         }
         $.ajax({
-            type    : "POST",
-            url     : "${createLink(controller:'documento', action:'tablaDocumentosProyecto_ajax')}",
-            data    : data,
-            success : function (msg) {
-                $("#tabla").html(msg);
+            type: 'POST',
+            url:'${createLink(controller: 'documento', action: 'tablaDocumentos_ajax')}',
+            data:data,
+            success: function(msg){
+                $("#tablaDocumentos").html(msg)
             }
         });
     }
@@ -58,10 +63,7 @@
     function submitFormDocumento() {
         var $form = $("#frmDocumento");
         var $btn = $("#dlgCreateEdit").find("#btnSave");
-        // $form.validate();
-        // console.log('submit');
         if ($form.valid()) {
-            // console.log('submit--')
             $btn.replaceWith(spinner);
             openLoader("Guardando Documento");
             var formData = new FormData($form[0]);
@@ -78,7 +80,7 @@
                     log(parts[1], parts[0] == "SUCCESS" ? "success" : "error"); // log(msg, type, title, hide)
                     closeLoader();
                     if (parts[0] == "SUCCESS") {
-                        reloadTablaDocumento();
+                        cargarTablaDocumento();
                         $("#dlgCreateEdit").modal("hide");
                     } else {
                         spinner.replaceWith($btn);
@@ -86,18 +88,19 @@
                     }
                 },
                 error       : function () {
-
                 }
             });
         } else {
             return false;
         } //else
     }
+
+
     function deleteDocumento(itemId) {
         bootbox.dialog({
             title   : "Alerta",
             message : "<i class='fa fa-trash fa-3x pull-left text-danger text-shadow'></i><p>" +
-                    "¿Está seguro que desea eliminar el Documento seleccionado? Esta acción no se puede deshacer.</p>",
+                "¿Está seguro que desea eliminar el Documento seleccionado? Esta acción no se puede deshacer.</p>",
             buttons : {
                 cancelar : {
                     label     : "Cancelar",
@@ -130,13 +133,14 @@
             }
         });
     }
+
     function createEditDocumento(id) {
         var title = id ? "Editar" : "Crear";
         var data = id ? {id : id} : {};
-        data.proyecto = "${proyecto.id}";
+        data.canton = "${canton.id}";
         $.ajax({
             type    : "POST",
-            url     : "${createLink(controller:'documento', action:'formProyecto_ajax')}",
+            url     : "${createLink(controller:'documento', action:'formDocumento_ajax')}",
             data    : data,
             success : function (msg) {
                 var b = bootbox.dialog({
@@ -166,6 +170,7 @@
             } //success
         }); //ajax
     } //createEdit
+
     function downloadDocumento(id) {
         $.ajax({
             type    : "POST",
@@ -184,19 +189,17 @@
     }
 
     $(function () {
-        reloadTablaDocumento();
+
 
         $("#btnSearchDoc").click(function () {
-            reloadTablaDocumento($.trim($("#searchDoc").val()));
+            cargarTablaDocumento($.trim($("#searchDoc").val()));
         });
         $("#searchDoc").keyup(function (ev) {
             if (ev.keyCode == 13) {
-                reloadTablaDocumento($.trim($("#searchDoc").val()));
+                cargarTablaDocumento($.trim($("#searchDoc").val()));
             }
         });
-        $("#btnAddDoc").click(function () {
-            createEditDocumento();
-        });
+
 
     });
 </script>

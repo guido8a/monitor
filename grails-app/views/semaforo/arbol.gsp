@@ -119,17 +119,29 @@
 
         var items = {};
 
+
+        var documento = {
+            label            : "Documentos",
+            icon             : "fa fa-book text-info",
+            action           : function () {
+                location.href = '${createLink(controller: 'documento', action: 'listDocumento')}/' + nodeId;
+            }
+        };
+
         var semaforo = {
             label            : "Semáforo",
             icon             : "fa fa-traffic-light text-danger",
+            separator_before : true,
             action           : function () {
                 location.href = '${createLink(controller: 'semaforo', action: 'list')}/' + nodeId;
             }
         };
 
+
         if (esRoot) {
         } else if (esPrincipal) {
         } else if (esCanton) {
+            items.documento = documento;
             items.semaforo = semaforo;
         }
         return items;
