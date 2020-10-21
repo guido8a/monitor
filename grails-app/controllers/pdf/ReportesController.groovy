@@ -91,7 +91,7 @@ class ReportesController {
 
         periodos.eachWithIndex{periodo,i->
             label = new Label(4, 4, periodos.last().fechaDesde?.format("dd-MM-yyyy")?.toString(), times16format); sheet.addCell(label);
-            sheet.setColumnView(5+i,15)
+            sheet.setColumnView(5+i,12)
             label = new Label(5 + i, 4, periodo?.fechaDesde?.format("dd-MM-yyyy")?.toString(), times16format); sheet.addCell(label);
         }
 
