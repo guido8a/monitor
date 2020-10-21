@@ -26,7 +26,7 @@
         <g:each in="${semaforos}" var="semaforo">
             <tr style="width: 100%; text-align: center">
 %{--                <td style="width:40%; background-color: ${semaforo.color == 3 ? '#c42623 ' : (semaforo.color == 2 ? '#FFE61F' : '#89B674')}"></td>--}%
-                <td style="width:20%;" class="semaforo ${semaforo.color == 3 ? 'red' : (semaforo.color == 2 ? 'yellow' : 'green')}"></td>
+                <td style="width:8%; height: 80%" class="semaforo ${semaforo.color == 3 ? 'red' : (semaforo.color == 2 ? 'yellow' : 'green')}"></td>
                 <td style="width:30%;">${semaforo.periodo.fechaDesde.format("dd-MM-yyyy")}</td>
                 <td style="width:30%;">${semaforo.periodo.fechaHasta.format("dd-MM-yyyy")}</td>
             </tr>
