@@ -45,7 +45,10 @@
 
 
         <p class="text-info pull-right" style="font-size: 10px; margin-top: 20px">
-            Desarrollado por: Guido Ochoa Moreno. Versión ${message(code: 'version', default: '1.1.0x')}
+        <a href="http://www.tedein.com.ec">Desarrollado y auspiciado por: Tedein S.A.</a>
+        </p>
+        <p class="text-info pull-left" style="font-size: 10px; margin-top: 20px; float: left">
+            Versión ${message(code: 'version', default: '1.1.0x')}
         </p>
     </div>
 </div>

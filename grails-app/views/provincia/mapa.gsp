@@ -55,15 +55,22 @@
 </div>
 
 <div class="btn-group" id="divAvanza" style="margin-top: 30px; margin-left: 10px">
-    <a href="#" class="btn btn-success" id="btnAdelante"><i class="fa fa-arrow-right"></i> Siguiente Período</a>
+    <a href="#" class="btn btn-success" id="btnAdelante" style="width: 130px"><i class="fa fa-arrow-right"></i> Siguiente Período</a>
 </div>
-<div class="btn-group" id="divAtras" style="margin-top: 30px; margin-left: 10px">
-    <a href="#" class="btn btn-success" id="btnAtras"><i class="fa fa-arrow-left"></i> Período Anterior</a>
+<div class="btn-group" id="divAtras" style="margin-top: 10px; margin-left: 10px">
+    <a href="#" class="btn btn-success" id="btnAtras" style="width: 130px"><i class="fa fa-arrow-left"></i> Período Anterior</a>
 </div>
+
+<div class="btn-group" id="divGuardar" style="margin-top: 20px; margin-left: 10px">
+    <a href="#" class="btn btn-info" id="btnGuardar"><i class="fa fa-save"></i> Guardar</a>
+</div>
+
+<p id="longitud" style="margin-left: 940px; height: 30px" class="text-info">Posición: Longitud y Latitud</p>
+
 
 
 <div id="nota" style="float: left; width: 180px;" >
-    <div style="margin: 20px; margin-top: 80px;" >
+    <div style="margin: 20px; margin-top: 40px;" >
         <b>Nota:</b>
 
         <p>Si usa el botón "Imprimir", use la configuración de página definir la horientación del papel horizontal y
@@ -80,7 +87,7 @@
 %{--    <a href="#" class="btn btn-info hidden" id="btnVolver"><i class="fa fa-arrow-left"></i> Regresar </a>--}%
 %{--</div>--}%
 
-<div class="btn-group" style="margin-top: 10px; margin-left: 10px">
+<div class="btn-group" id="divGuardar"  style="margin-left: 25px">
     <a href="#" class="btn btn-primary" id="btnImprimir"><i class="fa fa-print"></i> Imprimir </a>
 </div>
 
@@ -111,11 +118,6 @@
         new google.maps.LatLng(-0.28690, -76.59190)
     );
 
-    var marker = new google.maps.Marker({
-        position  : countryCenter,
-        draggable : true
-    });
-
     function initialize() {
 
         var myOptions = {
@@ -134,6 +136,34 @@
         };
 
         map = new google.maps.Map(document.getElementById('mapa'), myOptions);
+
+        %{--var path = '${assetPath(src: '/apli/marca.png')}';--}%
+        var path = '${assetPath(src: '/apli/pin-p.png')}';
+        var marcador = new google.maps.Marker({
+            map: map,
+            position: new google.maps.LatLng(-0.6, -74),
+            icon: path,
+            draggable : true
+        });
+
+/*
+        map.addListener('click', function(e) {
+            // map.setCenter(e.latLng);
+            // marcador.setPosition(e.latLng);
+            console.log('coords', e.latLng.lat(), e.latLng.lng())
+            $("#longitud").html('Long: ' + e.latLng.lat() + '<br/>Lat: ' + e.latLng.lng() )
+        });
+*/
+
+        marcador.addListener('drag', function(e) {
+            // map.setCenter(e.latLng);
+            // marcador.setPosition(e.latLng);
+            console.log('coords', e.latLng.lat(), e.latLng.lng())
+            $("#longitud").html('Longitud: ' + Math.round(e.latLng.lat()*1000000)/1000000 + '<br/>Latitud: ' +
+                Math.round(e.latLng.lng()*1000000)/1000000)
+        });
+
+
 
         /* maneja los datos */
         var cord = '${cord}'.split('_');
@@ -164,6 +194,7 @@
             });
             poneMensaje(marker, nmbr[i].strReplaceAll('kk', '<br>') + "<a href=link>Doc</a>");
         }
+
     }
 
     function poneMensaje(marker, secretMessage) {
@@ -177,8 +208,10 @@
     }
 
 
+
     $(function () {
         initialize();
+
     });
 
 
