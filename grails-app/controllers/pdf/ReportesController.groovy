@@ -73,7 +73,7 @@ class ReportesController {
         WritableCellFormat rojo = new WritableCellFormat(times16fontNormal);
         rojo.setBackground(Colour.DARK_RED);
         WritableCellFormat amarillo = new WritableCellFormat(times16fontNormal);
-        amarillo.setBackground(Colour.YELLOW);
+        amarillo.setBackground(Colour.VERY_LIGHT_YELLOW);
         WritableCellFormat verde = new WritableCellFormat(times16fontNormal);
         verde.setBackground(Colour.DARK_GREEN);
 
