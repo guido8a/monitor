@@ -103,7 +103,7 @@ class ProvinciaController {
         println "mapa: $params"
         def cn = dbConnectionService.getConnection()
         def sql = ""
-        def coord = '', nmbr = '', txto = '', docu, prdo = 0, periodo, dcmt
+        def coord = '', nmbr = '', txto = '', docu, prdo = 0, periodo, dcmt, cntn = ""
         if(!params.id) {
             prdo = 1
         } else {
@@ -117,19 +117,20 @@ class ProvinciaController {
         cn.eachRow(sql.toString()) {d ->
             coord += (coord? '_' : '') + "${d.cntnlatt} ${d.cntnlong} ${d.smfrcolr}"
 //            docu = d.nmrodcmt > 0
-            docu = true
+            docu = d.dcmtnmro > 0
             dcmt += (coord? '_' : '') + "${d.cntnlatt} ${d.cntnlong} ${d.smfrcolr}"
+            cntn += (cntn? '_' : '') + "${d.cntn__id}"
             txto = "${d.cntnnmbr} kkPeriodo: ${d.smfrfcds.format('dd-MMM-yyyy')} al ${d.smfrfchs.format('dd-MMM-yyyy')}" +
-                    "${(docu  ? 'kkDocumentos: 1' : '')}" +
-                    "kk<a href='/inicio/index'>Docuemnto</a>"
+                    "${(docu  ? 'kkDocumentos: ' + d.dcmtnmro : '')}"
 
             nmbr += (nmbr? '_' : '') + txto
             periodo = "${d.smfrfcds.format('dd-MMM-yyyy')} al ${d.smfrfchs.format('dd-MMM-yyyy')}"
         }
 
         //${assetPath(src: '/apli/pin-p.png')}
+//        println "--> cntn: $cntn"
         def semaforos = "${assetPath(src: '/apli/pin-p.png')} ${assetPath(src: '/apli/pin-o.png')} ${assetPath(src: '/apli/pin-p.png')}"
-        return [cord: coord, nmbr: nmbr, prdo: prdo, periodo: periodo]
+        return [cord: coord, nmbr: nmbr, prdo: prdo, periodo: periodo, cntn: cntn]
 
     }
 

@@ -190,15 +190,14 @@
         /* maneja los datos */
         var cord = '${cord}'.split('_');
         var nmbr = '${nmbr}'.split('_');
-        var ruta = '${ruta}'.split(' ');
-
+        var cntn = '${cntn}'.split('_');
+        var link = "";
         // console.log('ruta:', ruta);
 
         // poneMarcas(cord, path, nmbr);
         for (var i = 0; i <= cord.length; ++i) {
             var cr = cord[i].split(' ');
             var path = '';
-            var link = "${createLink(controller: 'provincia', action: 'mapa')}/1"
 
             path = '${assetPath(src: '/apli/pin-o.png')}';
             // console.log('ruta:', path);
@@ -214,7 +213,12 @@
                 position: new google.maps.LatLng(parseFloat(cr[0]), parseFloat(cr[1])),
                 icon: path
             });
-            poneMensaje(marker, nmbr[i].strReplaceAll('kk', '<br>') + "<a href=link>Doc</a>");
+            if(nmbr[i].contains('Documentos')) {
+                link = "${createLink(controller: 'documento', action: 'listDocumento')}/"+cntn[i]
+                poneMensaje(marker, nmbr[i].strReplaceAll('kk', '<br>') + "<br><a href=" + link + ">Ir a documentos</a>");
+            } else {
+                poneMensaje(marker, nmbr[i].strReplaceAll('kk', '<br>'));
+            }
         }
     }
 

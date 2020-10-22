@@ -11,7 +11,10 @@
         <div class="btn-toolbar toolbar">
             <div class="btn-group">
                 <g:link controller="semaforo" action="arbol" class="btn btn-sm btn-default">
-                    <i class="fa fa-arrow-left"></i> Regresar
+                    <i class="fa fa-arrow-left"></i> Regresar a Docuemntos
+                </g:link>
+                <g:link controller="provincia" action="mapa" class="btn btn-sm btn-default">
+                    <i class="fa fa-arrow-left"></i> Regresar al Mapa
                 </g:link>
             </div>
 
