@@ -132,4 +132,29 @@ class ProvinciaController {
         return [cord: coord, nmbr: nmbr, prdo: prdo, periodo: periodo]
 
     }
+
+    def provincia_ajax(){
+        return[latitud:params.lat, longitud:params.long]
+    }
+
+    def canton_ajax(){
+        def provincia = Provincia.get(params.id)
+        def cantones = Canton.findAllByProvincia(provincia).sort{it.nombre}
+        return[cantones: cantones]
+    }
+
+
+    def guardarCanton_ajax(){
+//        println("params gc " + params)
+        def canton = Canton.get(params.canton)
+        canton.latitud = params.latitud.toDouble()
+        canton.longitud = params.longitud.toDouble()
+
+        if(!canton.save(flush:true)){
+            println("error al guardar el canton desde mapa " + canton.errors)
+            render "no"
+        }else{
+            render "ok"
+        }
+    }
 } //fin controller

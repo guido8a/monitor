@@ -98,7 +98,13 @@
 
 
 
+<g:hiddenField name="latitudFinal" value="${0}"/>
+<g:hiddenField name="longitudFinal" value="${0}"/>
+
 <script type="text/javascript">
+
+
+
     //            window.onbeforeprint = preparar;
     //            window.onafterprint = despues;
 
@@ -117,6 +123,18 @@
         new google.maps.LatLng(-0.50, -76.44),
         new google.maps.LatLng(-0.28690, -76.59190)
     );
+
+    // var l1 = retornaCoordenadas()
+    // var l2
+
+   function retornaCoordenadas (lat, long){
+        console.log("111 " + lat)
+        console.log("222 " + long)
+        // l1 = lat
+        // l2 = long
+        return lat
+    }
+
 
     function initialize() {
 
@@ -154,32 +172,36 @@
             $("#longitud").html('Long: ' + e.latLng.lat() + '<br/>Lat: ' + e.latLng.lng() )
         });
 */
-
         marcador.addListener('drag', function(e) {
             // map.setCenter(e.latLng);
             // marcador.setPosition(e.latLng);
-            console.log('coords', e.latLng.lat(), e.latLng.lng())
+            console.log('coords', e.latLng.lat(), e.latLng.lng());
+            // retornaCoordenadas(e.latLng.lat(), e.latLng.lng());
             $("#longitud").html('Longitud: ' + Math.round(e.latLng.lat()*1000000)/1000000 + '<br/>Latitud: ' +
                 Math.round(e.latLng.lng()*1000000)/1000000)
+
+            $("#latitudFinal").val(Math.round(e.latLng.lat()*1000000)/1000000)
+            $("#longitudFinal").val(Math.round(e.latLng.lng()*1000000)/1000000)
+
         });
 
-
+         // console.log("--- " + latLng.lat())
 
         /* maneja los datos */
         var cord = '${cord}'.split('_');
         var nmbr = '${nmbr}'.split('_');
         var ruta = '${ruta}'.split(' ');
 
-        console.log('ruta:', ruta);
+        // console.log('ruta:', ruta);
 
         // poneMarcas(cord, path, nmbr);
         for (var i = 0; i <= cord.length; ++i) {
-            var cr = cord[i].split(' ')
+            var cr = cord[i].split(' ');
             var path = '';
             var link = "${createLink(controller: 'provincia', action: 'mapa')}/1"
 
             path = '${assetPath(src: '/apli/pin-o.png')}';
-            console.log('ruta:', path);
+            // console.log('ruta:', path);
             if(cr[2] == '1') {
                 path = '${assetPath(src: '/apli/pin-v.png')}';
             } else if(cr[2] == '2') {
@@ -194,27 +216,20 @@
             });
             poneMensaje(marker, nmbr[i].strReplaceAll('kk', '<br>') + "<a href=link>Doc</a>");
         }
-
     }
 
     function poneMensaje(marker, secretMessage) {
         var infowindow = new google.maps.InfoWindow({
             content: secretMessage
         });
-
         marker.addListener('click', function() {
             infowindow.open(marker.get('map'), marker);
         });
     }
 
-
-
     $(function () {
         initialize();
-
     });
-
-
 
     function cargarManual(){
         clearTimeout(timer);
@@ -265,6 +280,77 @@
         $("#btnAuto").removeClass('noprint')
         $("#btnManual").removeClass('noprint')
     });
+
+    $("#btnGuardar").click(function () {
+
+        var la = $("#latitudFinal").val();
+        var lo = $("#longitudFinal").val();
+
+        if(!la && !lo){
+          bootbox.alert('<i class="fa fa-exclamation-triangle text-danger fa-3x"></i> ' + '<strong style="font-size: 14px">' + "Seleccione las coordenadas usando el marcador P en el mapa" + '</strong>');
+        }else{
+            $.ajax({
+                type: "POST",
+                url: "${createLink(controller: 'provincia', action: 'provincia_ajax')}",
+                data: {
+                    lat: la,
+                    long: lo
+                },
+                success: function (msg) {
+                    var b = bootbox.dialog({
+                        id: "dlgSelCanton",
+                        title: "Guardar cantón",
+                        message: msg,
+                        buttons: {
+                            cancelar: {
+                                label: "Cancelar",
+                                className: "btn-primary",
+                                callback: function () {
+                                }
+                            },
+                            guardar: {
+                                id: "btnSave",
+                                label: "<i class='fa fa-save'></i> Guardar",
+                                className: "btn-success",
+                                callback: function () {
+                                        guardarMarcador();
+                                } //callback
+                            } //guardar
+                        } //buttons
+                    }); //dialog
+                    setTimeout(function () {
+                        b.find(".form-control").first().focus()
+                    }, 500);
+                } //success
+            }); //ajax
+        }
+    });
+
+    function guardarMarcador(){
+        var la = $("#latitudFinal").val();
+        var lo = $("#longitudFinal").val();
+        var canton = $("#canton").val();
+        $.ajax({
+            type:'POST',
+            url: '${createLink(controller: 'provincia', action: 'guardarCanton_ajax')}',
+            data:{
+                latitud: la,
+                longitud: lo,
+                canton: canton
+            },
+            success: function (msg) {
+                if(msg == 'ok'){
+                    log("Información guardada correctamente","success");
+                    setTimeout(function () {
+                        location.reload(true)
+                    }, 800);
+                }else{
+                    log("Error al guardar la información");
+                }
+            }
+        })
+    }
+
 
 </script>
 
