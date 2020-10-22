@@ -23,12 +23,14 @@
                         <a href="#" class="btn btn-xs btn-success btnDownDoc" data-id="${documento.id}" title="Descargar">
                             <i class="fa fa-download"></i>
                         </a>
-                        <a href="#" class="btn btn-xs btn-info btnEditDoc" data-id="${documento.id}" title="Editar">
-                            <i class="fa fa-edit"></i>
-                        </a>
-                        <a href="#" class="btn btn-xs btn-danger btnDelDoc" data-id="${documento.id}" title="Eliminar">
-                            <i class="fa fa-trash"></i>
-                        </a>
+                        <g:if test="${sesion}">
+                            <a href="#" class="btn btn-xs btn-info btnEditDoc" data-id="${documento.id}" title="Editar">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <a href="#" class="btn btn-xs btn-danger btnDelDoc" data-id="${documento.id}" title="Eliminar">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </g:if>
                     </div>
                 </td>
             </tr>

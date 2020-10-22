@@ -14,12 +14,13 @@ class DocumentoController {
 
     def listDocumento(){
         def canton = Canton.get(params.id)
-        return[canton:canton]
+        def existeSesion = session.usuario.id
+        return[canton:canton, sesion: existeSesion]
     }
 
     def tablaDocumentos_ajax(){
         def canton = Canton.get(params.id)
-
+        def existeSesion = session.usuario.id
         def documentos = Documento.withCriteria {
             eq("canton", canton)
             if (params.search && params.search != "") {
@@ -32,7 +33,7 @@ class DocumentoController {
             order("descripcion", "asc")
         }
 
-        return[canton:canton, documentos:documentos]
+        return[canton:canton, documentos:documentos, sesion: existeSesion]
     }
 
     def formDocumento_ajax(){

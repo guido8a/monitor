@@ -10,20 +10,22 @@
     <div class="panel-info" style="padding: 3px; margin-top: 2px">
         <div class="btn-toolbar toolbar">
             <div class="btn-group">
-                <g:link controller="semaforo" action="arbol" class="btn btn-sm btn-default">
-                    <i class="fa fa-arrow-left"></i> Regresar a Docuemntos
-                </g:link>
+                <g:if test="${sesion}">
+                    <g:link controller="semaforo" action="arbol" class="btn btn-sm btn-default">
+                        <i class="fa fa-arrow-left"></i> Regresar a Documentos
+                    </g:link>
+                </g:if>
                 <g:link controller="provincia" action="mapa" class="btn btn-sm btn-default">
                     <i class="fa fa-arrow-left"></i> Regresar al Mapa
                 </g:link>
             </div>
-
-            <div class="btn-group">
-                <a href="#" class="btn btn-sm btn-success" id="btnAddDoc">
-                    <i class="fa fa-plus"></i> Agregar documento
-                </a>
-            </div>
-
+            <g:if test="${sesion}">
+                <div class="btn-group">
+                    <a href="#" class="btn btn-sm btn-success" id="btnAddDoc">
+                        <i class="fa fa-plus"></i> Agregar documento
+                    </a>
+                </div>
+            </g:if>
             <div class="btn-group col-md-3 pull-right">
                 <div class="input-group input-group-sm">
                     <input type="text" class="form-control input-sm " id="searchDoc" placeholder="Buscar"/>
