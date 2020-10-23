@@ -11,7 +11,7 @@
     <title>Períodos</title>
 </head>
 
-<div class="panel panel-primary col-md-12">
+<div class="panel panel-primary col-md-6">
     <h3>Períodos</h3>
     <div class="panel-info" style="padding: 3px; margin-top: 2px">
         <div class="btn-toolbar toolbar">
@@ -30,7 +30,7 @@
     cargarTablaPeriodos();
 
     $("#btnAgregarPeriodo").click(function () {
-        createEditDocumento();
+        createEditPeriodo();
     });
 
     function cargarTablaPeriodos(){
@@ -46,142 +46,70 @@
         });
     }
 
-    %{--function submitFormDocumento() {--}%
-    %{--    var $form = $("#frmDocumento");--}%
-    %{--    var $btn = $("#dlgCreateEdit").find("#btnSave");--}%
-    %{--    if ($form.valid()) {--}%
-    %{--        $btn.replaceWith(spinner);--}%
-    %{--        openLoader("Guardando Documento");--}%
-    %{--        var formData = new FormData($form[0]);--}%
-    %{--        $.ajax({--}%
-    %{--            url         : $form.attr("action"),--}%
-    %{--            type        : 'POST',--}%
-    %{--            data        : formData,--}%
-    %{--            async       : false,--}%
-    %{--            cache       : false,--}%
-    %{--            contentType : false,--}%
-    %{--            processData : false,--}%
-    %{--            success     : function (msg) {--}%
-    %{--                var parts = msg.split("*");--}%
-    %{--                log(parts[1], parts[0] == "SUCCESS" ? "success" : "error"); // log(msg, type, title, hide)--}%
-    %{--                closeLoader();--}%
-    %{--                if (parts[0] == "SUCCESS") {--}%
-    %{--                    cargarTablaDocumento();--}%
-    %{--                    $("#dlgCreateEdit").modal("hide");--}%
-    %{--                } else {--}%
-    %{--                    spinner.replaceWith($btn);--}%
-    %{--                    return false;--}%
-    %{--                }--}%
-    %{--            },--}%
-    %{--            error       : function () {--}%
-    %{--            }--}%
-    %{--        });--}%
-    %{--    } else {--}%
-    %{--        return false;--}%
-    %{--    } //else--}%
-    %{--}--}%
+    function createEditPeriodo(id) {
+        var title = id ? "Editar" : "Crear";
+        var data = id ? {id : id} : {};
+        $.ajax({
+            type    : "POST",
+            url     : "${createLink(controller:'periodo', action:'formPeriodo_ajax')}",
+            data    : data,
+            success : function (msg) {
+                var b = bootbox.dialog({
+                    id      : "dlgCreateEdit",
+                    title   : title + " Período",
+                    message : msg,
+                    buttons : {
+                        cancelar : {
+                            label     : "Cancelar",
+                            className : "btn-primary",
+                            callback  : function () {
+                            }
+                        },
+                        guardar  : {
+                            id        : "btnSave",
+                            label     : "<i class='fa fa-save'></i> Guardar",
+                            className : "btn-success",
+                            callback  : function () {
+                                return submitFormPeriodo();
+                            } //callback
+                        } //guardar
+                    } //buttons
+                }); //dialog
+                setTimeout(function () {
+                    b.find(".form-control").first().focus()
+                }, 500);
+            } //success
+        }); //ajax
+    } //createEdit
 
-    %{--function deleteDocumento(itemId) {--}%
-    %{--    bootbox.dialog({--}%
-    %{--        title   : "Alerta",--}%
-    %{--        message : "<i class='fa fa-trash fa-3x pull-left text-danger text-shadow'></i><p>" +--}%
-    %{--            "¿Está seguro que desea eliminar el Documento seleccionado? Esta acción no se puede deshacer.</p>",--}%
-    %{--        buttons : {--}%
-    %{--            cancelar : {--}%
-    %{--                label     : "Cancelar",--}%
-    %{--                className : "btn-primary",--}%
-    %{--                callback  : function () {--}%
-    %{--                }--}%
-    %{--            },--}%
-    %{--            eliminar : {--}%
-    %{--                label     : "<i class='fa fa-trash'></i> Eliminar",--}%
-    %{--                className : "btn-danger",--}%
-    %{--                callback  : function () {--}%
-    %{--                    openLoader("Eliminando Documento");--}%
-    %{--                    $.ajax({--}%
-    %{--                        type    : "POST",--}%
-    %{--                        url     : '${createLink(controller:'documento', action:'delete_ajax')}',--}%
-    %{--                        data    : {--}%
-    %{--                            id : itemId--}%
-    %{--                        },--}%
-    %{--                        success : function (msg) {--}%
-    %{--                            var parts = msg.split("*");--}%
-    %{--                            log(parts[1], parts[0] == "SUCCESS" ? "success" : "error"); // log(msg, type, title, hide)--}%
-    %{--                            closeLoader();--}%
-    %{--                            if (parts[0] == "SUCCESS") {--}%
-    %{--                                cargarTablaDocumento();--}%
-    %{--                            }--}%
-    %{--                        }--}%
-    %{--                    });--}%
-    %{--                }--}%
-    %{--            }--}%
-    %{--        }--}%
-    %{--    });--}%
-    %{--}--}%
-
-    %{--function createEditDocumento(id) {--}%
-    %{--    var title = id ? "Editar" : "Crear";--}%
-    %{--    var data = id ? {id : id} : {};--}%
-    %{--    data.canton = "${canton.id}";--}%
-    %{--    $.ajax({--}%
-    %{--        type    : "POST",--}%
-    %{--        url     : "${createLink(controller:'documento', action:'formDocumento_ajax')}",--}%
-    %{--        data    : data,--}%
-    %{--        success : function (msg) {--}%
-    %{--            var b = bootbox.dialog({--}%
-    %{--                id      : "dlgCreateEdit",--}%
-    %{--                title   : title + " Documento",--}%
-    %{--                message : msg,--}%
-    %{--                buttons : {--}%
-    %{--                    cancelar : {--}%
-    %{--                        label     : "Cancelar",--}%
-    %{--                        className : "btn-primary",--}%
-    %{--                        callback  : function () {--}%
-    %{--                        }--}%
-    %{--                    },--}%
-    %{--                    guardar  : {--}%
-    %{--                        id        : "btnSave",--}%
-    %{--                        label     : "<i class='fa fa-save'></i> Guardar",--}%
-    %{--                        className : "btn-success",--}%
-    %{--                        callback  : function () {--}%
-    %{--                            return submitFormDocumento();--}%
-    %{--                        } //callback--}%
-    %{--                    } //guardar--}%
-    %{--                } //buttons--}%
-    %{--            }); //dialog--}%
-    %{--            setTimeout(function () {--}%
-    %{--                b.find(".form-control").first().focus()--}%
-    %{--            }, 500);--}%
-    %{--        } //success--}%
-    %{--    }); //ajax--}%
-    %{--} //createEdit--}%
-
-    %{--function downloadDocumento(id) {--}%
-    %{--    $.ajax({--}%
-    %{--        type    : "POST",--}%
-    %{--        url     : "${createLink(controller:'documento', action:'existeDoc_ajax')}",--}%
-    %{--        data    : {--}%
-    %{--            id : id--}%
-    %{--        },--}%
-    %{--        success : function (msg) {--}%
-    %{--            if (msg == "OK") {--}%
-    %{--                location.href = "${createLink(controller: 'documento', action: 'downloadDoc')}/" + id;--}%
-    %{--            } else {--}%
-    %{--                log("El documento solicitado no se encontró en el servidor", "error"); // log(msg, type, title, hide)--}%
-    %{--            }--}%
-    %{--        }--}%
-    %{--    });--}%
-    %{--}--}%
-
-    %{--$(function () {--}%
-    %{--    $("#btnSearchDoc").click(function () {--}%
-    %{--        cargarTablaDocumento($.trim($("#searchDoc").val()));--}%
-    %{--    });--}%
-    %{--    $("#searchDoc").keyup(function (ev) {--}%
-    %{--        if (ev.keyCode == 13) {--}%
-    %{--            cargarTablaDocumento($.trim($("#searchDoc").val()));--}%
-    %{--        }--}%
-    %{--    });--}%
-    %{--});--}%
+    function submitFormPeriodo() {
+        var $form = $("#frmPeriodo");
+        var $btn = $("#dlgCreateEdit").find("#btnSave");
+        if ($form.valid()) {
+            var data = $form.serialize();
+            $btn.replaceWith(spinner);
+            var dialog = cargarLoader("Guardando...");
+            $.ajax({
+                type    : "POST",
+                url     : $form.attr("action"),
+                data    : data,
+                success : function (msg) {
+                    dialog.modal('hide');
+                    var parts = msg.split("_");
+                    if(parts[0] == 'ok'){
+                        log(parts[1], "success");
+                        setTimeout(function () {
+                            location.reload(true);
+                        }, 1000);
+                    }else{
+                        bootbox.alert('<i class="fa fa-exclamation-triangle text-danger fa-3x"></i> ' + '<strong style="font-size: 14px">' + parts[1] + '</strong>');
+                        return false;
+                    }
+                }
+            });
+        } else {
+            return false;
+        }
+    }
 </script>
 </html>
