@@ -25,7 +25,6 @@
     <div id="tablaPeriodos"></div>
 </div>
 
-
 <script type="text/javascript">
     cargarTablaPeriodos();
 
@@ -111,5 +110,74 @@
             return false;
         }
     }
+
+    function borrarPeriodo(id){
+        bootbox.confirm({
+            message: "<i class='fa fa-3x fa-exclamation-triangle text-danger'></i> <strong style='font-size: 14px'>  Está seguro de eliminar este período? </strong>",
+            buttons: {
+                confirm: {
+                    label: 'Borrar',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'Cancelar',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                if(result){
+                    $.ajax({
+                        type:'POST',
+                        url:'${createLink(controller: 'periodo', action: 'borrarPeriodo_ajax')}',
+                        data:{
+                            id: id
+                        },
+                        success:function(msg){
+                            var parts = msg.split("_");
+                            if(parts[0] == 'ok'){
+                                log("Período borrado correctamente","success");
+                                setTimeout(function () {
+                                    location.reload(true);
+                                }, 1000);
+                            }else{
+                                if(parts[0] == 'er'){
+                                    bootbox.alert('<i class="fa fa-exclamation-triangle text-danger fa-3x"></i> ' + '<strong style="font-size: 14px">' + parts[1] + '</strong>');
+                                    return false;
+                                }else{
+                                    log("Error al borrar el período","error")
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+        });
+    }
+
+    function createContextMenu(node) {
+        var $tr = $(node);
+
+        var items = {
+            header: {
+                label: "Acciones",
+                header: true
+            }
+        };
+
+        var id = $tr.data("id");
+
+        var borrar = {
+            label: 'Borrar',
+            icon: "fa fa-trash",
+            action: function (e) {
+                borrarPeriodo(id)
+            }
+        };
+
+        items.borrar = borrar;
+
+        return items
+    }
+
 </script>
 </html>

@@ -128,22 +128,41 @@ class SemaforoController {
 
     def form_ajax(){
         def canton = Canton.get(params.canton)
-        return[canton: canton]
+        def semaforo
+        if(params.id){
+            semaforo = Semaforo.get(params.id)
+        }else{
+            semaforo = new Semaforo()
+        }
+        return[canton: canton, semaforo: semaforo]
     }
 
     def saveSemaforo_ajax(){
-        println("params ss " + params)
+//        println("params ss " + params)
 
         def canton = Canton.get(params.canton)
         def periodo = Periodo.get(params.periodo)
-
-        def existe = Semaforo.findAllByCantonAndPeriodo(canton,periodo)
         def semaforo
 
-        if(existe){
+        def existe = Semaforo.findByCantonAndPeriodo(canton,periodo)
+        def band
+
+        if(existe?.id == (params.id ? params.id.toInteger() : null)){
+            band = 0
+        }else{
+            band = 1
+        }
+
+        if(band == 1){
             render "er_Ya existe un registro creado en ese período"
         }else{
-            semaforo = new Semaforo()
+
+            if(params.id){
+                semaforo = Semaforo.get(params.id)
+            }else{
+                semaforo = new Semaforo()
+            }
+
             semaforo.canton = canton
             semaforo.periodo = periodo
             semaforo.color = params.color.toInteger()
@@ -154,6 +173,18 @@ class SemaforoController {
             }else{
                 render "ok"
             }
+        }
+    }
+
+    def borrarSemaforo_ajax(){
+        def semaforo = Semaforo.get(params.id)
+
+        try{
+            semaforo.delete(flush:true)
+            render "ok"
+        }catch(e){
+            println("error al borrar el semaforo" ) + semaforo.errors
+            render "no"
         }
     }
 

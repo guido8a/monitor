@@ -5,7 +5,6 @@
   Time: 13:46
 --%>
 
-%{--<link rel="stylesheet" href="${resource(dir: 'css/custom', file: 'semaforos.css')}" type="text/css"/>--}%
 <asset:stylesheet src="/apli/semaforos.css"/>
 
 <div>
@@ -24,8 +23,7 @@
     <table class="table-bordered table-condensed table-hover" style="width: 100%">
         <tbody>
         <g:each in="${semaforos}" var="semaforo">
-            <tr style="width: 100%; text-align: center">
-%{--                <td style="width:40%; background-color: ${semaforo.color == 3 ? '#c42623 ' : (semaforo.color == 2 ? '#FFE61F' : '#89B674')}"></td>--}%
+            <tr style="width: 100%; text-align: center" data-id="${semaforo?.id}">
                 <td style="width:8%; height: 80%" class="semaforo ${semaforo.color == 3 ? 'red' : (semaforo.color == 2 ? 'yellow' : 'green')}"></td>
                 <td style="width:30%;">${semaforo.periodo.fechaDesde.format("dd-MM-yyyy")}</td>
                 <td style="width:30%;">${semaforo.periodo.fechaHasta.format("dd-MM-yyyy")}</td>
@@ -36,5 +34,15 @@
 </div>
 
 <script type="text/javascript">
-
+    $(function () {
+        $("tr").contextMenu({
+            items  : createContextMenu,
+            onShow : function ($element) {
+                $element.addClass("trHighlight");
+            },
+            onHide : function ($element) {
+                $(".trHighlight").removeClass("trHighlight");
+            }
+        });
+    });
 </script>

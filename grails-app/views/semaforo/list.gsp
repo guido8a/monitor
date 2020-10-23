@@ -63,7 +63,6 @@
         })
     }
 
-
     function submitFormSemaforo() {
         var $form = $("#frmSemaforo");
         var $btn = $("#dlgCreateEdit").find("#btnSave");
@@ -100,11 +99,16 @@
     }
 
     $("#btnAgregarSemaforo").click(function () {
+            agregarSemaforo();
+    });
+
+    function agregarSemaforo(id){
         $.ajax({
             type: 'POST',
             url: '${createLink(controller: 'semaforo', action: 'form_ajax')}',
             data:{
-                canton:'${canton?.id}'
+                canton:'${canton?.id}',
+                id: id
             },
             success: function (msg) {
                 var b = bootbox.dialog({
@@ -130,7 +134,84 @@
                 }); //dialog
             }
         })
-    });
+    }
+
+    function borrarSemaforo(id){
+        bootbox.confirm({
+            message: "<i class='fa fa-3x fa-exclamation-triangle text-danger'></i> <strong style='font-size: 14px'>  Está seguro de eliminar este semáforo? </strong>",
+            buttons: {
+                confirm: {
+                    label: 'Borrar',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'Cancelar',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                if(result){
+                    $.ajax({
+                        type:'POST',
+                        url:'${createLink(controller: 'semaforo', action: 'borrarSemaforo_ajax')}',
+                        data:{
+                            id: id
+                        },
+                        success:function(msg){
+                            var parts = msg.split("_");
+                            if(parts[0] == 'ok'){
+                                log("Semáforo borrado correctamente","success");
+                                setTimeout(function () {
+                                    location.reload(true);
+                                }, 1000);
+                            }else{
+                                if(parts[0] == 'er'){
+                                    bootbox.alert('<i class="fa fa-exclamation-triangle text-danger fa-3x"></i> ' + '<strong style="font-size: 14px">' + parts[1] + '</strong>');
+                                    return false;
+                                }else{
+                                    log("Error al borrar el semáforo","error")
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+        });
+    }
+
+    function createContextMenu(node) {
+        var $tr = $(node);
+
+        var items = {
+            header: {
+                label: "Acciones",
+                header: true
+            }
+        };
+
+        var id = $tr.data("id");
+
+        var editar = {
+            label: 'Editar',
+            icon: "fa fa-edit",
+            action: function (e) {
+                agregarSemaforo(id)
+            }
+        };
+
+        var borrar = {
+            label: 'Borrar',
+            icon: "fa fa-trash",
+            action: function (e) {
+                borrarSemaforo(id)
+            }
+        };
+
+        items.editar = editar;
+        items.borrar = borrar;
+
+        return items
+    }
 
 
 </script>
