@@ -192,6 +192,51 @@
         });
     }
 
+
+    function createContextMenu(node) {
+        var $tr = $(node);
+
+        var items = {
+            header: {
+                label: "Acciones",
+                header: true
+            }
+        };
+
+        var id = $tr.data("id");
+
+        var editar = {
+            label: 'Editar',
+            icon: "fa fa-edit",
+            action: function (e) {
+                createEditDocumento(id)
+            }
+        };
+        var descargar = {
+            label: 'Descargar',
+            icon: "fa fa-download",
+            action: function (e) {
+                downloadDocumento(id)
+            }
+        };
+        var borrar = {
+            label: 'Borrar',
+            icon: "fa fa-trash",
+            action: function (e) {
+                deleteDocumento(id)
+            }
+        };
+
+        items.editar = editar;
+        items.descargar = descargar;
+        items.borrar = borrar;
+
+        return items
+    }
+
+
+
+
     $(function () {
         $("#btnSearchDoc").click(function () {
             cargarTablaDocumento($.trim($("#searchDoc").val()));
