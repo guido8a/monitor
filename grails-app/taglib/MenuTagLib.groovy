@@ -112,6 +112,7 @@ class MenuTagLib {
 
     def menu = { attrs ->
         def txt = ""
+        def inicio = "${createLink(controller:'login', action: 'login')}"
         def items = [:]
         def usuario, perfil, dpto
         if (session.usuario) {
@@ -154,7 +155,7 @@ class MenuTagLib {
                 }
             }
         } else {
-            items = ["Inicio": ["Ingresar al Sistema", "/login/login"]]
+            items = ["Inicio": ["Ingresar al Sistema", inicio]]
         }
 
         items.each { item ->
