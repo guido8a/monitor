@@ -6,7 +6,8 @@ class WardInterceptor {
 //        matchAll().excludes(controller: 'login')
         matchAll().excludes(controller:'login')
                 .excludes(controller:'shield')
-                .excludes(controller:'provincia')  /** todo: poner acciones base para incluir prfl **/
+                .excludes(controller:'provincia')  /** mapa **/
+                .excludes(controller:'documento')  /** documentos **/
                 .excludes(controller:'prfl')  /** todo: poner acciones base para incluir prfl **/
     }
 

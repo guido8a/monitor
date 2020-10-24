@@ -227,9 +227,12 @@
             }
         };
 
-        items.editar = editar;
         items.descargar = descargar;
-        items.borrar = borrar;
+
+        if('${sesion}') {
+            items.editar = editar;
+            items.borrar = borrar;
+        }
 
         return items
     }
