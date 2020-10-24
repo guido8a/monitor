@@ -40,13 +40,16 @@
 
 <body>
 
+<elm:flashMessage tipo="${flash.tipo}" clase="${flash.clase}">${flash.message}</elm:flashMessage>
+
 <div class="row hide" id="divError">
     <div class="span12 alert alert-error" id="spanError">
     </div>
 </div>
 
 <div class="datosObra col-md-12" style="margin-bottom: 0px; width: 100%; text-align: center">
-    <input type="hidden" id="prdo" value="${prdo}">
+    <input type="hidden" id="siguiente" value="${siguiente}">
+    <input type="hidden" id="anterior" value="${anterior}">
     <h3>Pandemia COVID-19 Semáforos Período: ${periodo}</h3>
 </div>
 
@@ -54,18 +57,36 @@
     <div id="mapa" style="width: 920px; height: 640px; margin-left: 10px; float: left; margin-bottom: 20px;"></div>
 </div>
 
-<div class="btn-group" id="divAvanza" style="margin-top: 30px; margin-left: 10px">
-    <a href="#" class="btn btn-success" id="btnAdelante" style="width: 130px"><i class="fa fa-arrow-right"></i> Siguiente Período</a>
-</div>
-<div class="btn-group" id="divAtras" style="margin-top: 10px; margin-left: 10px">
-    <a href="#" class="btn btn-success" id="btnAtras" style="width: 130px"><i class="fa fa-arrow-left"></i> Período Anterior</a>
-</div>
+<g:if test="${siguiente}">
+    <div class="btn-group" id="divAvanza" style="margin-top: 30px; margin-left: 10px">
+        <a href="#" class="btn btn-success" id="btnAdelante" style="width: 130px"><i class="fa fa-arrow-right"></i> Siguiente Período</a>
+    </div>
+</g:if>
+<g:else>
+    <div class="btn-group" id="divAvanza" style="margin-top: 30px; margin-left: 10px">
+        <a href="#" class="btn btn-success disabled" style="width: 130px"><i class="fa fa-arrow-right"></i> Siguiente Período</a>
+    </div>
+</g:else>
 
-<div class="btn-group" id="divGuardar" style="margin-top: 20px; margin-left: 10px">
-    <a href="#" class="btn btn-info" id="btnGuardar"><i class="fa fa-save"></i> Guardar</a>
-</div>
 
-<p id="longitud" style="margin-left: 940px; height: 30px" class="text-info">Posición: Longitud y Latitud</p>
+<g:if test="${anterior}">
+    <div class="btn-group" id="divAtras" style="margin-top: 10px; margin-left: 10px">
+        <a href="#" class="btn btn-success" id="btnAtras" style="width: 130px"><i class="fa fa-arrow-left"></i> Período Anterior</a>
+    </div>
+</g:if>
+<g:else>
+    <div class="btn-group" id="divAtras" style="margin-top: 10px; margin-left: 10px">
+        <a href="#" class="btn btn-success disabled" style="width: 130px"><i class="fa fa-arrow-left"></i> Período Anterior</a>
+    </div>
+</g:else>
+
+<g:if test="${session?.usuario}">
+    <div class="btn-group" id="divGuardar" style="margin-top: 20px; margin-left: 10px">
+        <a href="#" class="btn btn-info" id="btnGuardar"><i class="fa fa-save"></i> Guardar</a>
+    </div>
+
+    <p id="longitud" style="margin-left: 940px; height: 30px" class="text-info">Posición: Longitud y Latitud</p>
+</g:if>
 
 
 
@@ -96,6 +117,12 @@
 %{--    <a href="#" class="btn btn-info" id="btnManual"><i class="fa fa-map-marker"></i> Mapa Manual </a>--}%
 %{--</div>--}%
 
+<g:if test="${!session?.usuario}">
+    <div class="btn-group" id="divAtras" style="margin-top: 30px; margin-left: 10px">
+        <a href= "${createLink(controller:'login', action: 'login')}" class="btn btn-info btn-sm" style="width: 130px">
+            Ingresar <i class="fas fa-user-check"></i></a>
+    </div>
+</g:if>
 
 
 <g:hiddenField name="latitudFinal" value="${0}"/>
@@ -157,12 +184,14 @@
 
         %{--var path = '${assetPath(src: '/apli/marca.png')}';--}%
         var path = '${assetPath(src: '/apli/pin-p.png')}';
-        var marcador = new google.maps.Marker({
+        if('${session?.usuario?.id}'){
+            var marcador = new google.maps.Marker({
             map: map,
             position: new google.maps.LatLng(-0.6, -74),
             icon: path,
             draggable : true
-        });
+            });
+        }
 
 /*
         map.addListener('click', function(e) {
@@ -172,18 +201,20 @@
             $("#longitud").html('Long: ' + e.latLng.lat() + '<br/>Lat: ' + e.latLng.lng() )
         });
 */
-        marcador.addListener('drag', function(e) {
-            // map.setCenter(e.latLng);
-            // marcador.setPosition(e.latLng);
-            console.log('coords', e.latLng.lat(), e.latLng.lng());
-            // retornaCoordenadas(e.latLng.lat(), e.latLng.lng());
-            $("#longitud").html('Longitud: ' + Math.round(e.latLng.lat()*1000000)/1000000 + '<br/>Latitud: ' +
-                Math.round(e.latLng.lng()*1000000)/1000000)
+        if(marcador){
+            marcador.addListener('drag', function(e) {
+                // map.setCenter(e.latLng);
+                // marcador.setPosition(e.latLng);
+                console.log('coords', e.latLng.lat(), e.latLng.lng());
+                // retornaCoordenadas(e.latLng.lat(), e.latLng.lng());
+                $("#longitud").html('Longitud: ' + Math.round(e.latLng.lat()*1000000)/1000000 + '<br/>Latitud: ' +
+                    Math.round(e.latLng.lng()*1000000)/1000000)
 
-            $("#latitudFinal").val(Math.round(e.latLng.lat()*1000000)/1000000)
-            $("#longitudFinal").val(Math.round(e.latLng.lng()*1000000)/1000000)
+                $("#latitudFinal").val(Math.round(e.latLng.lat()*1000000)/1000000)
+                $("#longitudFinal").val(Math.round(e.latLng.lng()*1000000)/1000000)
 
-        });
+            });
+        };
 
          // console.log("--- " + latLng.lat())
 
@@ -200,7 +231,6 @@
             var path = '';
 
             path = '${assetPath(src: '/apli/pin-o.png')}';
-            // console.log('ruta:', path);
             if(cr[2] == '1') {
                 path = '${assetPath(src: '/apli/pin-v.png')}';
             } else if(cr[2] == '2') {
@@ -208,6 +238,8 @@
             } else {
                 path = '${assetPath(src: '/apli/pin-r.png')}';
             }
+
+            %{--console.log('usuario:', '${session?.usuario?.length()}');--}%
             var marker = new google.maps.Marker({
                 map: map,
                 position: new google.maps.LatLng(parseFloat(cr[0]), parseFloat(cr[1])),
@@ -256,15 +288,12 @@
     });
 
     $("#btnAtras").click(function (){
-        var prdo = $("#prdo").val();
-        prdo = parseInt(prdo) - 1;
-        if(prdo < 1) prdo = 1;
+        var prdo = $("#anterior").val();
         location.href="${createLink(controller: 'provincia', action: 'mapa')}/" + prdo
     });
 
     $("#btnAdelante").click(function (){
-        var prdo = $("#prdo").val();
-        prdo = parseInt(prdo) + 1;
+        var prdo = $("#siguiente").val();
         location.href="${createLink(controller: 'provincia', action: 'mapa')}/" + prdo
     });
 

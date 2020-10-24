@@ -102,35 +102,43 @@ class ProvinciaController {
     def mapa(){
         println "mapa: $params"
         def cn = dbConnectionService.getConnection()
-        def sql = ""
+        def sql = "", sql1, sql2
         def coord = '', nmbr = '', txto = '', docu, prdo = 0, periodo, dcmt, cntn = ""
         if(!params.id) {
             prdo = 1
         } else {
-            prdo = params.id.toInteger()
+            prdo = params.id
         }
+        println "prdo: $prdo"
+        sql1 = "select max(prdo__id) prdo from prdo where prdofchs < " +
+                "(select prdofcds from prdo where prdo__id = ${prdo})"
+        sql2 = "select min(prdo__id) prdo from prdo where prdofcds > " +
+                "(select prdofchs from prdo where prdo__id = ${prdo})"
+        println "sql1: $sql1"
+        println "sql2: $sql2"
+        def anterior = cn.rows(sql1.toString())[0]?.prdo
+        def siguiente = cn.rows(sql2.toString())[0]?.prdo
+        println "prdo: $prdo --> siguiente: $siguiente, <-- $anterior"
 
         sql = "select * from rp_smfr(${prdo})"
-        println "sql: $sql"
-        println "${createLink(controller: 'inicio', action: 'index')}"
+//        println "sql: $sql"
 
-        cn.eachRow(sql.toString()) {d ->
-            coord += (coord? '_' : '') + "${d.cntnlatt} ${d.cntnlong} ${d.smfrcolr}"
+        cn.eachRow(sql.toString()) { d ->
+            coord += (coord ? '_' : '') + "${d.cntnlatt} ${d.cntnlong} ${d.smfrcolr}"
 //            docu = d.nmrodcmt > 0
             docu = d.dcmtnmro > 0
-            dcmt += (coord? '_' : '') + "${d.cntnlatt} ${d.cntnlong} ${d.smfrcolr}"
-            cntn += (cntn? '_' : '') + "${d.cntn__id}"
+            dcmt += (coord ? '_' : '') + "${d.cntnlatt} ${d.cntnlong} ${d.smfrcolr}"
+            cntn += (cntn ? '_' : '') + "${d.cntn__id}"
             txto = "${d.cntnnmbr} kkPeriodo: ${d.smfrfcds.format('dd-MMM-yyyy')} al ${d.smfrfchs.format('dd-MMM-yyyy')}" +
-                    "${(docu  ? 'kkDocumentos: ' + d.dcmtnmro : '')}"
+                    "${(docu ? 'kkDocumentos: ' + d.dcmtnmro : '')}"
 
-            nmbr += (nmbr? '_' : '') + txto
+            nmbr += (nmbr ? '_' : '') + txto
             periodo = "${d.smfrfcds.format('dd-MMM-yyyy')} al ${d.smfrfchs.format('dd-MMM-yyyy')}"
         }
 
         //${assetPath(src: '/apli/pin-p.png')}
 //        println "--> cntn: $cntn"
-        def semaforos = "${assetPath(src: '/apli/pin-p.png')} ${assetPath(src: '/apli/pin-o.png')} ${assetPath(src: '/apli/pin-p.png')}"
-        return [cord: coord, nmbr: nmbr, prdo: prdo, periodo: periodo, cntn: cntn]
+        return [cord: coord, nmbr: nmbr, prdo: prdo, periodo: periodo, cntn: cntn, anterior: anterior, siguiente: siguiente]
 
     }
 

@@ -121,7 +121,7 @@ class MenuTagLib {
         }
         def strItems = ""
         if (!attrs.title) {
-            attrs.title = "Bitácora"
+            attrs.title = "Monitor"
         }
 //        attrs.title = attrs.title.toUpperCase()
         if (usuario) {
@@ -154,7 +154,7 @@ class MenuTagLib {
                 }
             }
         } else {
-            items = ["Inicio": ["Prueba", "linkPrueba", "Test", "linkTest"]]
+            items = ["Inicio": ["Ingresar al Sistema", "/login/login"]]
         }
 
         items.each { item ->
@@ -197,15 +197,20 @@ class MenuTagLib {
         html += strItems
         html += '</ul>'
 
-        html += '<ul class="nav navbar-nav navbar-right">'
+        if(usuario) {
+            html += '<ul class="nav navbar-nav navbar-right">'
 //        html += '<ul class="nav navbar-nav">'
 //        html += '<li><a href="' + g.createLink(controller: 'alerta', action: 'list') + '" ' + ((count > 0) ? ' style="color:#ab623a" class="annoying"' : "") + '><i class="fa fa-exclamation-triangle"></i> Alertas ' + alertas + '</a></li>'
-        html += '<li class="dropdown">'
-        html += '<a href="#" class="dropdown-toggle" data-toggle="dropdown">' + usuario?.login + ' (' + session?.perfil + ')' + ' <b class="caret"></b></a>'
-        html += '<ul class="dropdown-menu">'
-        html += '<li><a href="' + g.createLink(controller: 'persona', action: 'personal') + '"><i class="fa fa-cogs"></i> Configuración</a></li>'
-        html += '<li class="divider"></li>'
-        html += '<li><a href="' + g.createLink(controller: 'login', action: 'logout') + '"><i class="fa fa-power-off"></i> Salir</a></li>'
+            html += '<li class="dropdown">'
+            html += '<a href="#" class="dropdown-toggle" data-toggle="dropdown">' + usuario?.login + ' (' + session?.perfil + ')' + ' <b class="caret"></b></a>'
+            html += '<ul class="dropdown-menu">'
+            html += '<li><a href="' + g.createLink(controller: 'persona', action: 'personal') + '"><i class="fa fa-cogs"></i> Configuración</a></li>'
+            html += '<li class="divider"></li>'
+            html += '<li><a href="' + g.createLink(controller: 'login', action: 'logout') + '"><i class="fa fa-power-off"></i> Salir</a></li>'
+        } else {
+            html += "<p class='text-info pull-right' style='font-size: 14px; margin-top: 20px'> " +
+                    "<a href='http://www.tedein.com.ec\'>Auspiciado y Desarrollado <strong>Tedein S.A.</strong></a></p>"
+        }
         html += '</ul>'
         html += '</li>'
         html += '</ul>'

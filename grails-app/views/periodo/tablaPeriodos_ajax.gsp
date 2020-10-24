@@ -10,8 +10,9 @@
 <table class="table table-condensed table-hover table-striped table-bordered">
     <thead>
     <tr>
-        <th style="width: 50%">Fecha Desde</th>
-        <th style="width: 50%">Fecha Hasta</th>
+        <th style="width: 10%">Número</th>
+        <th style="width: 45%">Fecha Desde</th>
+        <th style="width: 45%">Fecha Hasta</th>
     </tr>
     </thead>
 </table>
@@ -19,10 +20,11 @@
 <div class=""  style="width: 99.7%;height: 350px; overflow-y: auto;float: right; margin-top: -20px">
     <table id="tablaB" class="table-bordered table-condensed table-hover" width="100%">
         <tbody>
-        <g:each in="${periodos}" var="periodo">
+        <g:each status="i" in="${periodos}" var="periodo" >
             <tr style="text-align: center" data-id="${periodo?.id}">
-                <td style="width: 40%">${periodo?.fechaDesde?.format("dd-MM-yyyy")}</td>
-                <td style="width: 40%">${periodo?.fechaHasta?.format("dd-MM-yyyy")}</td>
+                <td style="width: 10%">${total-i}</td>
+                <td style="width: 44%">${periodo?.fechaDesde?.format("dd-MM-yyyy")}</td>
+                <td style="width: 44%">${periodo?.fechaHasta?.format("dd-MM-yyyy")}</td>
             </tr>
         </g:each>
         </tbody>

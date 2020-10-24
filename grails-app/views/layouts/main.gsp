@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <title>
-        <g:layoutTitle default="FIDA"/>
+        <g:layoutTitle default="monitor"/>
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
@@ -80,7 +80,9 @@
 
 %{--<div id="modalTableGray"></div>--}%
 
-<mn:menu title="${g.layoutTitle(default: 'FIDA')}"/>
+%{--<g:if test="${session?.usuario}">--}%
+   <mn:menu title="${g.layoutTitle(default: 'Monitor')}"/>
+%{--</g:if>--}%
 
 <div class="container" style="min-width: 1000px !important; margin-top: 0px; overflow-y: hidden">
     <g:layoutBody/>

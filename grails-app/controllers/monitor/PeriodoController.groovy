@@ -2,14 +2,16 @@ package monitor
 
 
 class PeriodoController {
+    def dbConnectionService
 
     def list () {
 
     }
 
     def tablaPeriodos_ajax(){
-        def periodos = Periodo.list().sort{it.fechaDesde}
-        return[periodos:periodos]
+//        def periodos = Periodo.list().sort{it.fechaDesde}
+        def periodos = Periodo.list([sort: 'fechaDesde', order: 'Desc'])
+        return[periodos:periodos, total: periodos.size()]
     }
 
     def formPeriodo_ajax(){
@@ -26,7 +28,7 @@ class PeriodoController {
 
     def save_ajax (){
 //        println("params gp " + params)
-
+        def cn = dbConnectionService.getConnection()
         def fd = new Date().parse("dd-MM-yyyy",params.fechaDesde)
         def fh = new Date().parse("dd-MM-yyyy",params.fechaHasta)
 
@@ -34,6 +36,7 @@ class PeriodoController {
         def existeFechaD = Periodo.findAllByFechaDesde(fd)
         def existeFechaH = Periodo.findAllByFechaHasta(fh)
         def periodo
+        def sql = ""
 
 //        println("existe " + existe)
 //        println("existeFechaD " + existeFechaD)
@@ -49,6 +52,7 @@ class PeriodoController {
                     render "er_No se puede crear el período entre las fechas seleccionadas"
                 }else{
                     periodo = new Periodo()
+                    /* copiar los semáforos del periodo anterior */
                     periodo.fechaDesde = fd
                     periodo.fechaHasta = fh
 
@@ -56,7 +60,12 @@ class PeriodoController {
                         println("error al guardar el periodo " + periodo.errors)
                         render "no_Error al guardar el período"
                     }else{
-                        render "ok_Período guardado correctamente"
+                        periodo.refresh()
+                        sql = "insert into smfr(cntn__id, smfrcolr, prdo__id) select cntn__id, smfrcolr, ${periodo.id} " +
+                                "from smfr where prdo__id = (select max(prdo__id) from smfr)"
+//                        println "sql: ${sql}"
+                        cn.execute(sql.toString())
+                        render "ok_Período guardado correctamente<br>Se copiaron además todos los semáforos del último periodo"
                     }
                 }
             }

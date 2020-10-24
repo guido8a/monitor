@@ -6,6 +6,7 @@ class WardInterceptor {
 //        matchAll().excludes(controller: 'login')
         matchAll().excludes(controller:'login')
                 .excludes(controller:'shield')
+                .excludes(controller:'provincia')  /** todo: poner acciones base para incluir prfl **/
                 .excludes(controller:'prfl')  /** todo: poner acciones base para incluir prfl **/
     }
 
@@ -27,51 +28,12 @@ class WardInterceptor {
         } else {
             if (!session?.usuario && !session?.perfil) {
                 if(controllerName != "inicio" && actionName != "index") {
-                    flash.message = "Usted ha superado el tiempo de inactividad máximo de la sesión"
+//                    flash.message = "Usted ha superado el tiempo de inactividad máximo de la sesión"
                 }
-//                render grailsLinkGenerator.link(controller: 'login', action: 'login', absolute: true)
-//                redirect(controller: 'login', action: 'login')
                 render "<script type='text/javascript'> window.location.href = '/' </script>"
                 session.finalize()
                 return false
-            } /*else {
-//                def usu = Persona.get(session.usuario.id)
-                println "session válida: ${usro.id} --> ${session?.unidad?.id}"
-                if (usro.estaActivo) {
-//                    session.departamento = UnidadEjecutora.get(session.unidad.id).refresh()
-                    session.unidad = UnidadEjecutora.get(session.unidad.id)
-                    def perms = session.usuario.permisos
-//                    session.usuario = Persona.get(session.usuario.id).refresh()
-                    session.usuario.permisos = perms
-
-                    if (!isAllowed()) {
-                        println "no permitido"
-                        redirect(controller: 'shield', action: 'ataques')
-                        return false
-                    }
-
-                } else {
-                    println "session.flag: " + session.flag
-                    if (!session.flag || session.flag < 1) {
-//                    println "menor que cero "+session.flag
-                        session.usuario = null
-                        session.perfil = null
-                        session.permisos = null
-                        session.menu = null
-                        session.an = null
-                        session.cn = null
-                        session.invalidate()
-                        session.flag = null
-                        session.finalize()
-                        redirect(controller: 'login', action: 'login')
-                        return false
-                    } else {
-                        session.flag = session.flag - 1
-                        session.unidad = Departamento.get(session.departamento.id).refresh()
-                        return true
-                    }
-                }
-            }*/
+            }
         }
 
         true
