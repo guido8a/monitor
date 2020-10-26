@@ -102,7 +102,7 @@ class ProvinciaController {
 
 
     def mapa(){
-        println "mapa: $params"
+//        println "mapa: $params"
         def cn = dbConnectionService.getConnection()
         def sql = "", sql1, sql2
         def coord = '', nmbr = '', txto = '', docu, prdo = 0, periodo, dcmt, cntn = ""
@@ -133,11 +133,11 @@ class ProvinciaController {
                 "(select prdofcds from prdo where prdo__id = ${prdo})"
         sql2 = "select min(prdo__id) prdo from prdo where prdofcds > " +
                 "(select prdofchs from prdo where prdo__id = ${prdo})"
-        println "sql1: $sql1"
-        println "sql2: $sql2"
+//        println "sql1: $sql1"
+//        println "sql2: $sql2"
         def anterior = cn.rows(sql1.toString())[0]?.prdo
         def siguiente = cn.rows(sql2.toString())[0]?.prdo
-        println "prdo: $prdo --> siguiente: $siguiente, <-- $anterior"
+//        println "prdo: $prdo --> siguiente: $siguiente, <-- $anterior"
 
         sql = "select * from rp_smfr(${prdo})"
 //        println "sql: $sql"

@@ -304,17 +304,21 @@
         $("#divAvanza").addClass("hidden");
         $("#divAtras").addClass("hidden");
 
-        $("#nota").addClass('noprint')
-        $("#btnVolver").addClass('noprint')
-        $("#btnImprimir").addClass('noprint')
-        $("#btnAuto").addClass('noprint')
-        $("#btnManual").addClass('noprint')
+        $("#nota").addClass('noprint');
+        $("#btnVolver").addClass('noprint');
+        $("#btnImprimir").addClass('noprint');
+        $("#btnAuto").addClass('noprint');
+        $("#btnManual").addClass('noprint');
+        $("#btnGuardar").addClass('noprint');
+        $("#longitud").addClass('noprint');
         window.print()
-        $("#nota").removeClass('noprint')
-        $("#btnVolver").removeClass('noprint')
-        $("#btnImprimir").removeClass('noprint')
-        $("#btnAuto").removeClass('noprint')
-        $("#btnManual").removeClass('noprint')
+        $("#nota").removeClass('noprint');
+        $("#btnVolver").removeClass('noprint');
+        $("#btnImprimir").removeClass('noprint');
+        $("#btnAuto").removeClass('noprint');
+        $("#btnManual").removeClass('noprint');
+        $("#btnGuardar").removeClass('noprint');
+        $("#longitud").removeClass('noprint');
     });
 
     $("#btnGuardar").click(function () {
