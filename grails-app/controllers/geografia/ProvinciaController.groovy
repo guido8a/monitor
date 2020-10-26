@@ -1,5 +1,6 @@
 package geografia
 
+import monitor.Periodo
 import seguridad.Visita
 
 class ProvinciaController {
@@ -158,7 +159,7 @@ class ProvinciaController {
         //${assetPath(src: '/apli/pin-p.png')}
 //        println "--> cntn: $cntn"
         return [cord: coord, nmbr: nmbr, prdo: prdo, periodo: periodo, cntn: cntn, anterior: anterior,
-                siguiente: siguiente, visita: visita?.id]
+                siguiente: siguiente, visita: visita?.id, pr: Periodo.get(prdo)]
 
     }
 

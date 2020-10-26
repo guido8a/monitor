@@ -29,16 +29,10 @@
                     <i class="fa fa-plus"></i> Nuevo registro
                 </a>
             </div>
-
-%{--            <div class="btn-group col-md-3 pull-right">--}%
-%{--                <div class="input-group input-group-sm">--}%
-%{--                    <input type="text" class="form-control input-sm " id="searchDoc" placeholder="Buscar"/>--}%
-%{--                    <span class="input-group-btn">--}%
-%{--                        <a href="#" class="btn btn-default" id="btnSearchDoc"><i class="fa fa-search"></i></a>--}%
-%{--                    </span>--}%
-%{--                </div><!-- /input-group -->--}%
-%{--            </div>--}%
         </div>
+    </div>
+    <div class="alert-warning" style="text-align: center; font-size: 14px; font-weight: bold">
+        * Clic derecho sobre un registro para desplegar su menú de opciones
     </div>
     <div id="tablaSemaforos" style="width: 100%">
 

@@ -54,9 +54,29 @@
     <h3>Pandemia COVID-19 Semáforos Período: ${periodo}</h3>
 </div>
 
+<div class="col-md-12" style="text-align: center; margin-bottom: 10px">
+    <div class="form-group">
+        <span class="grupo">
+            <label class="col-md-1 control-label text-info" style="font-size: 14px">
+                Período
+            </label>
+            <div class="col-md-4" style="text-align: center">
+                <g:select name="periodo" from="${monitor.Periodo.list().sort{it.fechaDesde}.reverse()}" class="form-control"
+                          optionKey="id" optionValue="${{"Desde: " + it.fechaDesde.format("dd-MM-yyyy") + " Hasta: " + it.fechaHasta.format("dd-MM-yyyy")}}" value="${pr?.id}"/>
+            </div>
+            <div class="col-md-1 btn-group">
+                <a href="#" class="btn btn-info" id="btnIr"><i class="fa fa-search"></i> Visualizar</a>
+            </div>
+        </span>
+    </div>
+</div>
+
+
 <div>
     <div id="mapa" style="width: 920px; height: 640px; margin-left: 10px; float: left; margin-bottom: 20px;"></div>
 </div>
+
+
 
 <g:if test="${siguiente}">
     <div class="btn-group" id="divAvanza" style="margin-top: 30px; margin-left: 10px">
@@ -131,7 +151,9 @@
 
 <script type="text/javascript">
 
-
+    $("#btnIr").click(function () {
+       location.href="${createLink(controller: 'provincia', action: 'mapa')}/" + $("#periodo option:selected").val()
+     });
 
     //            window.onbeforeprint = preparar;
     //            window.onafterprint = despues;
