@@ -17,7 +17,7 @@
 
 <body>
 
-<div style="text-align: center; margin-top: 22px; height: ${(flash.message) ? '680' : '610'}px;" class="well">
+<div style="text-align: center; margin-top: 22px; height: ${(flash.message) ? '640' : '570'}px;" class="well">
 
     <h1 class="titl" style="font-size: 24px; color: #06a">Monitor del COVID</h1>
     <h1 class="titl" style="font-size: 16px; color: #06a">Semáforos y Documentación Generada por la Emergencia del COVID-19</h1>
@@ -29,31 +29,34 @@
             <div>
                 <asset:image src="apli/portada.png" style="padding: 10px;"/>
             </div>
+            <div style="margin-top: -30px"><h3>Ir al mapa de semáforos</h3></div>
         </a>
 
-        <div style="width: 100%;height: 40px;float: left; margin-bottom:30px; text-align: center">
-            <a href="#" id="ingresar" class="btn btn-primary" style="width: 120px; margin: auto">
-                Ingresar <i class="fas fa-user-check"></i></a>
+%{--
+        <div style="width: 100%;height: 40px;float: left; margin-bottom:5px; text-align: center">
             <a href="${createLink(controller:'provincia', action: 'mapa', id:-1)}" class="btn btn-warning" style="width: 120px; margin: auto">
                 Sin usuario <i class="fas fa-user-times"></i></a>
         </div>
+--}%
 
 
         <div>
             Para mayor información puede consultar el
             <a href="${createLink(uri: '/descriptivo.pdf')}">
                 <asset:image src="apli/pdf_pq.png" style="padding: 10px;"/> descriptivo del sistema</a>
+
+            <a href="#" id="ingresar" class="btn btn-primary btn-sm" style="width: 160px; margin-left: 200px;">
+                Administrador <i class="fas fa-user-check"></i></a>
         </div>
 
 
-        <p class="text-info pull-right" style="font-size: 10px; margin-top: 20px">
+        <p class="text-info pull-right" style="font-size: 10px; margin-top: -80px">
             <a href="http://www.tedein.com.ec">Desarrollado y auspiciado por: Tedein S.A.</a>
         </p>
-        <p class="text-info pull-left" style="font-size: 10px; margin-top: 20px; float: left">
+        <p class="text-info pull-left" style="font-size: 10px; margin-top: -80px; float: left">
             Versión ${message(code: 'version', default: '1.1.0x')}
         </p>
     </div>
-</div>
 
 
 <div class="modal fade" id="modal-ingreso" tabindex="-1" role="dialog" aria-labelledby=""

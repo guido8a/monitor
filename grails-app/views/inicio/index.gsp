@@ -177,6 +177,48 @@
         </div>
     </a>
 
+    <a href= "${createLink(controller:'periodo', action: 'list')}" style="text-decoration: none">
+        <div class="col-lg-6 mbr-col-md-10">
+            <div class="wrap">
+                <div style="width: 200px; height: 120px">
+                    <asset:image src="apli/proyecto.png" title="Períodos y semáforos por cantón"  width="80%" height="80%"/>
+                </div>
+                <div style="width: 450px; height: 120px">
+                    <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5"><span>Períodos</span></h2>
+                    <p class="mbr-fonts-style text1 mbr-text display-6">Registro de nuevos períodos y semáforos</p>
+                </div>
+            </div>
+        </div>
+    </a>
+
+    <a href= "${createLink(controller:'semaforo', action: 'arbol')}" style="text-decoration: none">
+        <div class="col-lg-6 mbr-col-md-10">
+            <div class="wrap">
+                <div style="width: 200px; height: 120px">
+                    <asset:image src="apli/proyecto.png" title="Documentos por cantón"  width="80%" height="80%"/>
+                </div>
+                <div style="width: 450px; height: 120px">
+                    <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5"><span>Documentos</span></h2>
+                    <p class="mbr-fonts-style text1 mbr-text display-6">Registro de documentos y acuerdos generados</p>
+                </div>
+            </div>
+        </div>
+    </a>
+
+    <a href= "${createLink(controller:'canton', action: 'arbol')}" style="text-decoration: none">
+        <div class="col-lg-6 mbr-col-md-10">
+            <div class="wrap">
+                <div style="width: 200px; height: 120px">
+                    <asset:image src="apli/proyecto.png" title="Cantones"  width="80%" height="80%"/>
+                </div>
+                <div style="width: 450px; height: 120px">
+                    <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5"><span>Cantones</span></h2>
+                    <p class="mbr-fonts-style text1 mbr-text display-6">Datos de cantones</p>
+                </div>
+            </div>
+        </div>
+    </a>
+
 
 
 </div>

@@ -155,7 +155,7 @@ class MenuTagLib {
                 }
             }
         } else {
-            items = ["Inicio": ["Ingresar al Sistema", inicio]]
+            items = ["Inicio": ["Abandonar el Sistema", inicio]]
         }
 
         items.each { item ->
@@ -210,7 +210,7 @@ class MenuTagLib {
             html += '<li><a href="' + g.createLink(controller: 'login', action: 'logout') + '"><i class="fa fa-power-off"></i> Salir</a></li>'
         } else {
             html += "<p class='text-info pull-right' style='font-size: 14px; margin-top: 20px'> " +
-                    "<a href='http://www.tedein.com.ec\'>Auspiciado y Desarrollado <strong>Tedein S.A.</strong></a></p>"
+                    "<a href='http://www.tedein.com.ec\'>Auspiciado y Desarrollado por <strong>Tedein S.A.</strong></a></p>"
         }
         html += '</ul>'
         html += '</li>'

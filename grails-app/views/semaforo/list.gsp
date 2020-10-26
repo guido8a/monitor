@@ -32,7 +32,7 @@
         </div>
     </div>
     <div class="alert-warning" style="text-align: center; font-size: 14px; font-weight: bold">
-        * Clic derecho sobre un registro para desplegar su menú de opciones
+        * Haga clic derecho sobre un registro para desplegar su menú de opciones
     </div>
     <div id="tablaSemaforos" style="width: 100%">
 

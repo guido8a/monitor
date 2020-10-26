@@ -103,7 +103,7 @@ class ProvinciaController {
 
 
     def mapa(){
-//        println "mapa: $params"
+        println "mapa: $params"
         def cn = dbConnectionService.getConnection()
         def sql = "", sql1, sql2
         def coord = '', nmbr = '', txto = '', docu, prdo = 0, periodo, dcmt, cntn = ""

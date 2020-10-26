@@ -241,7 +241,7 @@ class LoginController {
                         if (count > 0) {
                             redirect(controller: 'alertas', action: 'list')
                         } else {// llama a reporte
-                            redirect(controller: 'provincia', action: 'mapa', id: 1)
+                            redirect(controller: 'inicio', action: 'index', id: 1)
                         }
 
                         return

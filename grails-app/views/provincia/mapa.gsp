@@ -51,29 +51,22 @@
     <input type="hidden" id="siguiente" value="${siguiente}">
     <input type="hidden" id="anterior" value="${anterior}">
     <input type="hidden" id="visita" value="${visita}">
-    <h3>Pandemia COVID-19 Semáforos Período: ${periodo}</h3>
-</div>
+    <div class="col-md-7"><h3>COVID-19 Semáforos del Período: ${periodo}</h3></div>
+    <div class="col-md-1" style="text-align: right">
+        Seleecione el Período:
+    </div>
+    <div class="col-md-3">
+        <g:select name="periodo" from="${monitor.Periodo.list().sort{it.fechaDesde}.reverse()}" class="form-control"
+                  optionKey="id" optionValue="${{'Del ' + it.fechaDesde.format("dd-MMM-yyyy") + " al " + it.fechaHasta.format("dd-MMM-yyyy")}}" value="${pr?.id}"/>
+    </div>
 
-<div class="col-md-12" style="text-align: center; margin-bottom: 10px">
-    <div class="form-group">
-        <span class="grupo">
-            <label class="col-md-1 control-label text-info" style="font-size: 14px">
-                Período
-            </label>
-            <div class="col-md-4" style="text-align: center">
-                <g:select name="periodo" from="${monitor.Periodo.list().sort{it.fechaDesde}.reverse()}" class="form-control"
-                          optionKey="id" optionValue="${{"Desde: " + it.fechaDesde.format("dd-MM-yyyy") + " Hasta: " + it.fechaHasta.format("dd-MM-yyyy")}}" value="${pr?.id}"/>
-            </div>
-            <div class="col-md-1 btn-group">
-                <a href="#" class="btn btn-info" id="btnIr"><i class="fa fa-search"></i> Visualizar</a>
-            </div>
-        </span>
+    <div class="col-md-1 btn-group">
+        <a href="#" class="btn btn-info" id="btnIr"><i class="fa fa-search"></i> Visualizar</a>
     </div>
 </div>
 
-
 <div>
-    <div id="mapa" style="width: 920px; height: 640px; margin-left: 10px; float: left; margin-bottom: 20px;"></div>
+    <div id="mapa" style="width: 920px; height: 640px; margin-left: 0px; float: left; margin-bottom: 20px;"></div>
 </div>
 
 
@@ -89,7 +82,6 @@
     </div>
 </g:else>
 
-
 <g:if test="${anterior}">
     <div class="btn-group" id="divAtras" style="margin-top: 10px; margin-left: 10px">
         <a href="#" class="btn btn-success" id="btnAtras" style="width: 130px"><i class="fa fa-arrow-left"></i> Período Anterior</a>
@@ -100,6 +92,7 @@
         <a href="#" class="btn btn-success disabled" style="width: 130px"><i class="fa fa-arrow-left"></i> Período Anterior</a>
     </div>
 </g:else>
+
 
 <g:if test="${session?.usuario}">
     <div class="btn-group" id="divGuardar" style="margin-top: 20px; margin-left: 10px">
@@ -138,10 +131,19 @@
 %{--    <a href="#" class="btn btn-info" id="btnManual"><i class="fa fa-map-marker"></i> Mapa Manual </a>--}%
 %{--</div>--}%
 
+%{--
 <g:if test="${!session?.usuario}">
     <div class="btn-group" id="divAtras" style="margin-top: 30px; margin-left: 10px">
         <a href= "${createLink(controller:'login', action: 'login')}" class="btn btn-info btn-sm" style="width: 130px">
             Ingresar <i class="fas fa-user-check"></i></a>
+    </div>
+</g:if>
+--}%
+
+<g:if test="${!session?.usuario}">
+    <div class="btn-group" id="divAtras" style="margin-top: 50px; margin-left: 10px">
+        <a href= "${createLink(controller:'login', action: 'login')}" class="btn btn-info btn-sm" style="width: 130px">
+            Salir &nbsp; <i class="fas fa-sign-out-alt"></i></a>
     </div>
 </g:if>
 
@@ -150,10 +152,6 @@
 <g:hiddenField name="longitudFinal" value="${0}"/>
 
 <script type="text/javascript">
-
-    $("#btnIr").click(function () {
-       location.href="${createLink(controller: 'provincia', action: 'mapa')}/" + $("#periodo option:selected").val()
-     });
 
     //            window.onbeforeprint = preparar;
     //            window.onafterprint = despues;
@@ -320,6 +318,11 @@
         var prdo = $("#siguiente").val();
         var visita = $("#visita").val();
         location.href="${createLink(controller: 'provincia', action: 'mapa')}/" + prdo + "?visita=" + visita
+    });
+
+    $("#btnIr").click(function () {
+        var visita = $("#visita").val();
+        location.href="${createLink(controller: 'provincia', action: 'mapa')}/" + $("#periodo option:selected").val() + "?visita=" + visita
     });
 
     $("#btnImprimir").click(function () {
