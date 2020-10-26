@@ -65,7 +65,7 @@ class PeriodoController {
                                 "from smfr where prdo__id = (select max(prdo__id) from smfr)"
 //                        println "sql: ${sql}"
                         cn.execute(sql.toString())
-                        render "ok_Período guardado correctamente<br>Se copiaron además todos los semáforos del último periodo"
+                        render "ok_Período guardado correctamente<br>Se copiaron además todos los semáforos del último período"
                     }
                 }
             }

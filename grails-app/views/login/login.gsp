@@ -6,12 +6,12 @@
     <title>Login</title>
 
     <style type="text/css">
-        .archivo {
-            width: 100%;
-            float: left;
-            margin-top: 60px;
-            text-align: center;
-        }
+    .archivo {
+        width: 100%;
+        float: left;
+        margin-top: 60px;
+        text-align: center;
+    }
     </style>
 </head>
 
@@ -25,26 +25,29 @@
                       clase="${flash.clase}">${flash.message}</elm:flashMessage>
 
     <div class="dialog ui-corner-all" style="height: 295px;padding: 10px;width: 910px;margin: auto;margin-top: 5px">
-    <a href= "${createLink(controller:'provincia', action: 'mapa', id:-1)}" style="text-decoration: none">
-        <div>
-            <asset:image src="apli/portada.png" style="padding: 10px;"/>
-        </div>
-    </a>
+        <a href= "${createLink(controller:'provincia', action: 'mapa', id:-1)}" style="text-decoration: none">
+            <div>
+                <asset:image src="apli/portada.png" style="padding: 10px;"/>
+            </div>
+        </a>
 
         <div style="width: 100%;height: 40px;float: left; margin-bottom:30px; text-align: center">
             <a href="#" id="ingresar" class="btn btn-primary" style="width: 120px; margin: auto">
                 Ingresar <i class="fas fa-user-check"></i></a>
+            <a href="${createLink(controller:'provincia', action: 'mapa', id:-1)}" class="btn btn-warning" style="width: 120px; margin: auto">
+                Sin usuario <i class="fas fa-user-times"></i></a>
         </div>
+
 
         <div>
             Para mayor información puede consultar el
             <a href="${createLink(uri: '/descriptivo.pdf')}">
-            <asset:image src="apli/pdf_pq.png" style="padding: 10px;"/> descriptivo del sistema</a>
+                <asset:image src="apli/pdf_pq.png" style="padding: 10px;"/> descriptivo del sistema</a>
         </div>
 
 
         <p class="text-info pull-right" style="font-size: 10px; margin-top: 20px">
-        <a href="http://www.tedein.com.ec">Desarrollado y auspiciado por: Tedein S.A.</a>
+            <a href="http://www.tedein.com.ec">Desarrollado y auspiciado por: Tedein S.A.</a>
         </p>
         <p class="text-info pull-left" style="font-size: 10px; margin-top: 20px; float: left">
             Versión ${message(code: 'version', default: '1.1.0x')}

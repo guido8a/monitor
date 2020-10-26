@@ -8,6 +8,11 @@
 
 <g:form class="form-horizontal" name="frmPeriodo" action="save_ajax">
 
+
+    <div class="col-md-12" style="margin-bottom: 10px">
+        <strong>* Al crear un nuevo período se copiarán los semáforos del último período</strong>
+    </div>
+
     <div class="form-group ${hasErrors(bean: periodo, field: 'fechaDesde', 'error')} ">
         <span class="grupo">
             <label for="fechaDesde" class="col-md-2 control-label text-info">
