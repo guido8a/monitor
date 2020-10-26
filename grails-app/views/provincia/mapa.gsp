@@ -50,6 +50,7 @@
 <div class="datosObra col-md-12" style="margin-bottom: 0px; width: 100%; text-align: center">
     <input type="hidden" id="siguiente" value="${siguiente}">
     <input type="hidden" id="anterior" value="${anterior}">
+    <input type="hidden" id="visita" value="${visita}">
     <h3>Pandemia COVID-19 Semáforos Período: ${periodo}</h3>
 </div>
 
@@ -289,12 +290,14 @@
 
     $("#btnAtras").click(function (){
         var prdo = $("#anterior").val();
-        location.href="${createLink(controller: 'provincia', action: 'mapa')}/" + prdo
+        var visita = $("#visita").val();
+        location.href="${createLink(controller: 'provincia', action: 'mapa')}/" + prdo + "?visita=" + visita
     });
 
     $("#btnAdelante").click(function (){
         var prdo = $("#siguiente").val();
-        location.href="${createLink(controller: 'provincia', action: 'mapa')}/" + prdo
+        var visita = $("#visita").val();
+        location.href="${createLink(controller: 'provincia', action: 'mapa')}/" + prdo + "?visita=" + visita
     });
 
     $("#btnImprimir").click(function () {

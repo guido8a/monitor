@@ -1,5 +1,7 @@
 package geografia
 
+import seguridad.Visita
+
 class ProvinciaController {
 
     def dbConnectionService
@@ -104,6 +106,23 @@ class ProvinciaController {
         def cn = dbConnectionService.getConnection()
         def sql = "", sql1, sql2
         def coord = '', nmbr = '', txto = '', docu, prdo = 0, periodo, dcmt, cntn = ""
+        def visita
+        if(params.id == '-1') {
+            params.id = 1
+            /* registra ingreso directo sin hacer login */
+            println  "visita desde ip: ${request.getRemoteAddr()}"  //activo
+            visita = new Visita()
+            visita.fecha = new Date()
+            visita.dirIP = request.getRemoteAddr()
+            visita.save()
+            sql = "insert into vist(vist__id, vistfcha, vistdrip, vistclic) values(default, " +
+                    "${new Date().format('yyyy-mm-dd')}"
+        } else if(params.visita) {
+            println "incremente visita"
+            visita = Visita.get(params.visita)
+            visita.clics++
+            visita.save(flush: true)
+        }
         if(!params.id) {
             prdo = 1
         } else {
@@ -138,7 +157,8 @@ class ProvinciaController {
 
         //${assetPath(src: '/apli/pin-p.png')}
 //        println "--> cntn: $cntn"
-        return [cord: coord, nmbr: nmbr, prdo: prdo, periodo: periodo, cntn: cntn, anterior: anterior, siguiente: siguiente]
+        return [cord: coord, nmbr: nmbr, prdo: prdo, periodo: periodo, cntn: cntn, anterior: anterior,
+                siguiente: siguiente, visita: visita?.id]
 
     }
 

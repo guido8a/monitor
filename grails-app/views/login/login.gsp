@@ -25,7 +25,7 @@
                       clase="${flash.clase}">${flash.message}</elm:flashMessage>
 
     <div class="dialog ui-corner-all" style="height: 295px;padding: 10px;width: 910px;margin: auto;margin-top: 5px">
-    <a href= "${createLink(controller:'provincia', action: 'mapa')}" style="text-decoration: none">
+    <a href= "${createLink(controller:'provincia', action: 'mapa', id:-1)}" style="text-decoration: none">
         <div>
             <asset:image src="apli/portada.png" style="padding: 10px;"/>
         </div>
