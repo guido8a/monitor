@@ -26,6 +26,14 @@
         display : none;
     }
 
+    .abajo {
+        position: fixed;
+        left: 0;
+        bottom: 40px;
+        width: 100%;
+        text-align: center;
+    }
+
     @media print
     {
         @page {
@@ -160,6 +168,10 @@
             Salir &nbsp; <i class="fas fa-sign-out-alt"></i></a>
     </div>
 </g:if>
+
+<p class="soloPrint" id="tedein">
+    Impreso desde: www.tedein.com.ec/monitor  &nbsp; TEDEIN S.A. <i>Tecnología para el Desarrollo Integral</i>
+</p>
 
 
 <g:hiddenField name="latitudFinal" value="${0}"/>
@@ -356,6 +368,8 @@
         $("#btnManual").addClass('noprint');
         $("#btnGuardar").addClass('noprint');
         $("#longitud").addClass('noprint');
+        $("#tedein").removeClass('soloPrint');
+        $("#tedein").addClass('abajo');
         window.print()
         $("#nota").removeClass('noprint');
         $("#btnVolver").removeClass('noprint');
@@ -374,6 +388,7 @@
 
         $("#titulo").removeClass("col-md-12");
         $("#titulo").addClass("col-md-7");
+        $("#tedein").removeClass('abajo');
     });
 
     $("#btnGuardar").click(function () {
