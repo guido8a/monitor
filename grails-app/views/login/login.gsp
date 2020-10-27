@@ -42,8 +42,8 @@
 
         <div>
             Para mayor información puede consultar el
-            <a href="${createLink(uri: '/descriptivo.pdf')}">
-                <asset:image src="apli/pdf_pq.png" style="padding: 10px;"/> descriptivo del sistema</a>
+            <a href="${createLink(controller: 'descargas', action: 'manual')}">
+                <asset:image src="apli/pdf_pq.png" style="padding: 10px;"/> manual del usuario</a>
 
             <a href="#" id="ingresar" class="btn btn-primary btn-sm" style="width: 160px; margin-left: 200px;">
                 Administrador <i class="fas fa-user-check"></i></a>

@@ -8,7 +8,8 @@ class WardInterceptor {
                 .excludes(controller:'shield')
                 .excludes(controller:'provincia')  /** mapa **/
                 .excludes(controller:'documento')  /** documentos **/
-                .excludes(controller:'prfl')  /** todo: poner acciones base para incluir prfl **/
+                .excludes(controller:'descargas')  /** documentos **/
+                .excludes(controller:'prfl')
     }
 
     boolean before() {

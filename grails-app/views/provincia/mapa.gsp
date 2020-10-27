@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: fabricio
-  Date: 15/10/20
-  Time: 12:02
---%>
-
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
@@ -13,7 +6,6 @@
 
     <script type="text/javascript"
             src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBpasnhIQUsHfgCvC3qeJpEgcB9_ppWQI0&sensor=true">
-        // src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpasnhIQUsHfgCvC3qeJpEgcB9_ppWQI0&callback=initMap">
 
     </script>
 
@@ -33,9 +25,31 @@
     .noprint {
         display : none;
     }
+
+    @media print
+    {
+        @page {
+            size: A4; /* DIN A4 standard, Europe */
+            /*margin:0;*/
+            /*arriba derecha abajo izquierda*/
+            margin: 0mm 0mm 0mm 15mm;
+        }
+        html, body {
+            width: 297mm;
+            height: 190mm;
+            /*height: 282mm;*/
+            font-size: 11px;
+            background: #FFF;
+            overflow: visible;
+        }
+        body {
+            padding-top:0mm;
+        }
+    }
+
     </style>
 
-    <title>Semáforos covid-19</title>
+    <title>Semáforos Covid-19</title>
 </head>
 
 <body>
@@ -47,20 +61,20 @@
     </div>
 </div>
 
-<div class="datosObra col-md-12" style="margin-bottom: 0px; width: 100%; text-align: center">
+<div class="datosObra col-md-12" style="margin-bottom: 0px; width: 100%; text-align: center; margin-top: 0px;">
     <input type="hidden" id="siguiente" value="${siguiente}">
     <input type="hidden" id="anterior" value="${anterior}">
     <input type="hidden" id="visita" value="${visita}">
-    <div class="col-md-7"><h3>COVID-19 Semáforos del Período: ${periodo}</h3></div>
-    <div class="col-md-1" style="text-align: right">
-        Seleecione el Período:
+    <div class="col-md-7" id="titulo"><h3>COVID-19 Semáforos del Período: ${periodo}</h3></div>
+    <div class="col-md-1"   id="divSel" style="text-align: right">
+        Seleccione el Período:
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3" id="divCombo">
         <g:select name="periodo" from="${monitor.Periodo.list().sort{it.fechaDesde}.reverse()}" class="form-control"
                   optionKey="id" optionValue="${{'Del ' + it.fechaDesde.format("dd-MMM-yyyy") + " al " + it.fechaHasta.format("dd-MMM-yyyy")}}" value="${pr?.id}"/>
     </div>
 
-    <div class="col-md-1 btn-group">
+    <div class="col-md-1 btn-group" id="divVer">
         <a href="#" class="btn btn-info" id="btnIr"><i class="fa fa-search"></i> Visualizar</a>
     </div>
 </div>
@@ -141,7 +155,7 @@
 --}%
 
 <g:if test="${!session?.usuario}">
-    <div class="btn-group" id="divAtras" style="margin-top: 50px; margin-left: 10px">
+    <div class="btn-group" id="btnSalir" style="margin-top: 50px; margin-left: 10px">
         <a href= "${createLink(controller:'login', action: 'login')}" class="btn btn-info btn-sm" style="width: 130px">
             Salir &nbsp; <i class="fas fa-sign-out-alt"></i></a>
     </div>
@@ -326,8 +340,14 @@
     });
 
     $("#btnImprimir").click(function () {
-        $("#divAvanza").addClass("hidden");
-        $("#divAtras").addClass("hidden");
+        $("#divAvanza").addClass("noprint");
+        $("#divAtras").addClass("noprint");
+        $("#btnSalir").addClass("noprint");
+        $("#divSel").addClass("noprint");
+        $("#divCombo").addClass("noprint");
+        $("#divVer").addClass("noprint");
+        $("#titulo").removeClass("col-md-7");
+        $("#titulo").addClass("col-md-12");
 
         $("#nota").addClass('noprint');
         $("#btnVolver").addClass('noprint');
@@ -344,6 +364,16 @@
         $("#btnManual").removeClass('noprint');
         $("#btnGuardar").removeClass('noprint');
         $("#longitud").removeClass('noprint');
+
+        $("#divAvanza").removeClass("noprint");
+        $("#divAtras").removeClass("noprint");
+        $("#btnSalir").removeClass("noprint");
+        $("#divSel").removeClass("noprint");
+        $("#divCombo").removeClass("noprint");
+        $("#divVer").removeClass("noprint");
+
+        $("#titulo").removeClass("col-md-12");
+        $("#titulo").addClass("col-md-7");
     });
 
     $("#btnGuardar").click(function () {
