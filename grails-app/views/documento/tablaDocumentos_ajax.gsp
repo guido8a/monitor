@@ -7,32 +7,18 @@
             <th>Descripción</th>
             <th>Palabras Clave</th>
             <th>Resumen</th>
-%{--            <th>Acciones</th>--}%
+            <th>Fecha</th>
         </tr>
     </thead>
     <tbody id="tbDoc">
         <g:each in="${documentos}" var="documento">
-            <tr data-id="${documento?.id}">
-                <td>${documento.fuente.descripcion}</td>
-                <td><elm:textoBusqueda busca="${params.search}">${documento.descripcion}</elm:textoBusqueda></td>
-                <td><elm:textoBusqueda busca="${params.search}">${documento.clave}</elm:textoBusqueda></td>
-                <td><elm:textoBusqueda busca="${params.search}">${documento.resumen}</elm:textoBusqueda></td>
-%{--                <td style="width: 90px;">--}%
-%{--                    <div class="btn-group" role="group">--}%
+            <tr data-id="${documento?.id}" style="width: 100%">
+                <td style="width: 15%">${documento.fuente.descripcion}</td>
+                <td style="width: 40%"><elm:textoBusqueda busca="${params.search}">${documento.descripcion}</elm:textoBusqueda></td>
+                <td style="width: 10%"><elm:textoBusqueda busca="${params.search}">${documento.clave}</elm:textoBusqueda></td>
+                <td style="width: 25%"><elm:textoBusqueda busca="${params.search}">${documento.resumen}</elm:textoBusqueda></td>
+                <td style="width: 10%; text-align: center">${documento?.fecha?.format("dd-MM-yyyy")}</td>
 
-%{--                        <a href="#" class="btn btn-xs btn-success btnDownDoc" data-id="${documento.id}" title="Descargar">--}%
-%{--                            <i class="fa fa-download"></i>--}%
-%{--                        </a>--}%
-%{--                        <g:if test="${sesion}">--}%
-%{--                            <a href="#" class="btn btn-xs btn-info btnEditDoc" data-id="${documento.id}" title="Editar">--}%
-%{--                                <i class="fa fa-edit"></i>--}%
-%{--                            </a>--}%
-%{--                            <a href="#" class="btn btn-xs btn-danger btnDelDoc" data-id="${documento.id}" title="Eliminar">--}%
-%{--                                <i class="fa fa-trash"></i>--}%
-%{--                            </a>--}%
-%{--                        </g:if>--}%
-%{--                    </div>--}%
-%{--                </td>--}%
             </tr>
         </g:each>
     </tbody>

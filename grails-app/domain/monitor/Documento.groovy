@@ -32,6 +32,10 @@ class Documento implements Auditable {
      * Path del archivo del documento
      */
     String ruta
+    /**
+     * fecha de creación del documento
+     */
+    Date fecha
 
     /**
      * Define los campos que se van a ignorar al momento de hacer logs
@@ -55,6 +59,7 @@ class Documento implements Auditable {
             clave column: 'dcmtclve'
             resumen column: 'dcmtrsmn'
             ruta column: 'dcmtruta'
+            fecha column: 'dcmtfcha'
         }
     }
 
@@ -66,6 +71,7 @@ class Documento implements Auditable {
         clave(size: 1..63, blank: true, nullable: true, attributes: [mensaje: 'Palabras clave'])
         resumen(size: 1..1024, blank: true, nullable: true, attributes: [mensaje: 'Resumen'])
         ruta(size: 1..255, blank: true, nullable: true, attributes: [mensaje: 'Ruta'])
+        fecha(blank: true, nullable: true)
     }
 
     /**

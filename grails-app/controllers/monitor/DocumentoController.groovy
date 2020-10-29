@@ -30,7 +30,7 @@ class DocumentoController {
                     ilike("resumen", "%" + params.search + "%")
                 }
             }
-            order("descripcion", "asc")
+            order("fecha", "desc")
         }
 
         return[canton:canton, documentos:documentos, sesion: existeSesion]
@@ -183,6 +183,8 @@ class DocumentoController {
                             documentoInstance = new Documento()
                             println "ERROR*No se encontró Documento."
                         }
+                    }else{
+                        documentoInstance.fecha = new Date();
                     }
                     params.remove("ruta")
                     documentoInstance.properties = params
