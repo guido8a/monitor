@@ -44,7 +44,7 @@
         }
         html, body {
             width: 297mm;
-            height: 190mm;
+            height: 180mm;
             /*height: 282mm;*/
             font-size: 11px;
             background: #FFF;
@@ -78,11 +78,11 @@
         Seleccione el Período:
     </div>
     <div class="col-md-3" id="divCombo">
-        <g:select name="periodo" from="${monitor.Periodo.list().sort{it.fechaDesde}.reverse()}" class="form-control"
+        <g:select name="periodo" from="${monitor.Periodo.list().sort{it.fechaDesde}.reverse()}" class="form-control text-info"
                   optionKey="id" optionValue="${{'Del ' + it.fechaDesde.format("dd-MMM-yyyy") + " al " + it.fechaHasta.format("dd-MMM-yyyy")}}" value="${pr?.id}"/>
     </div>
 
-    <div class="col-md-1 btn-group" id="divVer">
+    <div class="col-md-1 btn-group" id="divVer" style="margin-left: -20px">
         <a href="#" class="btn btn-info" id="btnIr"><i class="fa fa-search"></i> Visualizar</a>
     </div>
 </div>
@@ -170,7 +170,7 @@
 </g:if>
 
 <p class="soloPrint" id="tedein">
-    Impreso desde: www.tedein.com.ec/monitor  &nbsp; TEDEIN S.A. <i>Tecnología para el Desarrollo Integral</i>
+    Recopilación de información COLECTIVO ECUADOR CON GESTIÓN DE RIESGOS  - Impreso desde: www.tedein.com.ec/monitor  &nbsp; TEDEIN S.A. <i>Tecnología para el Desarrollo Integral</i>
 </p>
 
 
@@ -388,6 +388,7 @@
 
         $("#titulo").removeClass("col-md-12");
         $("#titulo").addClass("col-md-7");
+        $("#tedein").addClass('soloPrint');
         $("#tedein").removeClass('abajo');
     });
 

@@ -128,16 +128,17 @@ class LoginController {
 
     def login() {
 //        println "login " + params
-        def usu = session.usuario
+//        def cn = dbConnectionService.getConnection()
+//        def sql = "", sql1, sql2
+        def usro = session.usuario
         def cn = "inicio"
         def an = "index"
-        if (usu) {
-//            if (session.cn && session.an) {
-//                cn = session.cn
-//                an = session.an
-//            }
+        if (usro) {
             redirect(controller: cn, action: an)
         }
+//        sql1 = "select max(prdo__id) prdo from smfr"
+//        def ultimo = cn.rows(sql1.toString())[0]?.prdo
+//        [ultimo: ultimo]
     }
 
     def validar() {

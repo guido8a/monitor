@@ -109,7 +109,8 @@ class ProvinciaController {
         def coord = '', nmbr = '', txto = '', docu, prdo = 0, periodo, dcmt, cntn = ""
         def visita
         if(params.id == '-1') {
-            params.id = 1
+            sql1 = "select max(prdo__id) prdo from smfr"
+            params.id = cn.rows(sql1.toString())[0]?.prdo
             /* registra ingreso directo sin hacer login */
             println  "visita desde ip: ${request.getRemoteAddr()}"  //activo
             visita = new Visita()
