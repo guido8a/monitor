@@ -122,7 +122,7 @@ class SemaforoController {
 
     def tablaSemaforo_ajax(){
         def canton = Canton.get(params.id)
-        def semaforos = Semaforo.findAllByCanton(canton).sort{it.periodo.fechaDesde}
+        def semaforos = Semaforo.findAllByCanton(canton).sort{it.periodo.fechaDesde}.reverse()
         return[semaforos:semaforos]
     }
 
