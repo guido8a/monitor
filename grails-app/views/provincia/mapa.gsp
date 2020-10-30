@@ -130,8 +130,9 @@
     <div style="margin: 20px; margin-top: 40px;" >
         <b>Nota:</b>
 
-        <p>Si usa el botón "Imprimir", use la configuración de página definir la horientación del papel horizontal y
-        una escala de 100% para cubrir toda la hoja en tamaño A4</p>
+        <p>Para "Imprimir", use la configuración de página definir la hoja en tamaño A4,
+        horientación del papel horizontal y una escala de 92%. Verifique que la opción
+        "Ignorar el escalado y ajustar a la página" no este seleccionada.</p>
 
         <p>Se puede usar también la opción "Vista preliminar" desde el menú de Firefox: <span style="color: #000">Archivo -> Imprimir
         -> Vista preliminar</span>, para fijar la horientación del papel a horizontal y

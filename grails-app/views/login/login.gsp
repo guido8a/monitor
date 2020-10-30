@@ -50,8 +50,11 @@
         </div>
 
 
-        <p class="text-info pull-right" style="font-size: 10px; margin-top: -80px">
-            <a href="http://www.tedein.com.ec">Desarrollado y auspiciado por: Tedein S.A.</a>
+%{--        <p class="text-info pull-right" style="font-size: 10px; margin-top: -80px">--}%
+        <p class="text-info" style="font-size: 10px; margin-top: -85px; float: right">
+            <a href="http://www.tedein.com.ec">Desarrollado y auspiciado por: <strong>Tedein S.A.</strong>
+                <asset:image src="logo tedein pq.jpeg" style="height: 22px; width: 22px; margin-left: 10px"/>
+            </a>
         </p>
         <p class="text-info pull-left" style="font-size: 10px; margin-top: -80px; float: left">
             Versión ${message(code: 'version', default: '1.1.0x')}
